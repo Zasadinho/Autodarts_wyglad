@@ -11,7 +11,7 @@
 // @supportURL   https://github.com/Szala86/Autodarts-core/issues
 // @downloadURL  https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
 // @updateURL    https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
-// @description  CORE panel with presets + HU/EN/DE + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
+// @description  CORE panel with presets + PL/EN + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
 // ==/UserScript==
 
 (() => {
@@ -133,7 +133,7 @@
     safeMode: true,
     compact: false,
     helpOpen: false,
-    lang: "pl",              // hu | en | de
+    lang: "pl",              //  en
     clock: clone(DEFAULT_CLOCK),
   };
 
@@ -146,257 +146,7 @@
 
   /* ================== I18N ================== */
   const I18N = {
-    hu: {
-      appTitle: "🎯 Autodarts CORE",
-      modulesTitle: "Kapcsolók / modulok",
-      help: "Súgó",
-      close: "Bezár",
-      export: "Export",
-      import: "Import",
-      activeRefresh: "Aktív frissítés (ms)",
-      activeRefreshHint: "Aktív játékos felismerés polling. 0 = csak DOM figyelés. Ha néha késik, 100–200ms jó.",
-      preset: "Preset",
-      reset: "Reset",
-      resetPreset: "Reset Preset",
-      resetAll: "Reset MINDEN",
-      resetAllConfirm: "Biztosan mindent alaphelyzetbe állítasz? (Presetek + UI)",
-      saved: "Mentve ✓",
-      posReset: "Panel pozíció reset",
-      btnPosReset: "Fő gomb helye reset",
-      safeMode: "Safe Mode (ajánlott)",
-      compact: "Kompakt mód",
-      hotkeysLine: "Hotkeys: Shift+F panel • Shift+1/2/3 preset • Shift+M Safe • Shift+H help • ESC close",
-      hintConfig: "Beállítások →",
-      iconConfigTitle: "Állítható (katt a sorra)",
-      markerNow: "Marker frissítés most",
-      markerInfo: "Board marker: megjelöli a tábla SVG-t (ad-board-svg). Ha a custom tábla skin ezt használja, maradjon ON.",
-      bmInfo: "A /boards oldalon betesz egy 'Vissza az Autodartsba' gombot (touch/fullscreenben hasznos).",
-      bmBackLabel: "Vissza az Autodartsba",
-      skinInfo: "Skin/Layout: Ha használsz Stylebotot ehhez az oldalhoz, kapcsold ki, mert összeakadhat ezzel a userscripttel. (Autodarts frissítésnél a css-xxxxx classnevek változhatnak, ilyenkor frissíteni kell a CSS szelektorokat.)",
-      diagCopy: "Debug info másolás",
-      diagSelectors: "Szelektor ellenőrzés",
-      diagOk: "OK",
-      diagMissing: "HIÁNYZIK",
-      diagOptional: "OPCIONÁLIS",
-      tab: {
-        general:  "Általános",
-        skin:     "Skin / Layout",
-        board:    "Eszköz – Board marker",
-        bmback:   "Eszköz – Vissza gomb (/boards)",
-        throws:   "Megjelenítés – Dobáspontok",
-        orig:     "Megjelenítés – Sarok jelölés (T20)",
-        total:    "Megjelenítés – Összérték",
-        checkout: "Megjelenítés – Checkout tipp",
-        active:   "Kiemelés – Aktív játékos",
-        triple:   "Animáció – Tripla találat",
-        win:      "Hang – Győzelem",
-        clock:    "Widget – Óra",
-        diag: "Diagnosztika",
-      },
-      fields: {
-        bg: "Háttér",
-        bgOpacity: "Háttér áttetszőség",
-        hoverBg: "Hover háttér",
-        hoverOpacity: "Hover áttetszőség",
-        fontSize: "Betűméret",
-        color: "Szín",
-        opacity: "Áttetszőség",
-        outline: "Keret vastagság",
-        glow: "Glow erősség",
-        highlightSpeed: "Highlight sebesség",
-        numberAnim: "Szám animáció",
-        rattleDur: "Rázkódás idő",
-        rattleDelay: "Rázkódás késleltetés",
-        volume: "Hangerő",
-      },
-      totalInfo: "Fix: a Total szám overlay, így a beállítások mindig érvényesülnek és a kártya magassága nem változik.",
-      skinText: {
-        uiScale: "UI méret (scale)",
-        spacing: "Játékos távolság (spacing)",
-        playerBg: "Player kártya háttér",
-        playerBgOpacity: "Player háttér áttetszőség",
-        bgUrl: "Háttérkép URL",
-        overlay: "Overlay áttetszőség",
-        autoDisable: "Auto kikapcsolás, ha frissítés után elcsúszik (ajánlott)",
-      },
-      clockText: {
-        enabled: "Óra engedélyezése",
-        scale: "Méret",
-        bg: "Háttérszín",
-        bgAlpha: "Háttér áttetszőség",
-        text: "Szöveg szín",
-        format24: "24 órás formátum",
-        seconds: "Másodperc mutatása",
-        resetLook: "Óra stílus reset",
-        resetPos: "Óra pozíció reset",
-        hint: "Mozgatás: húzd az órát. Méret: Ctrl+↑ / Ctrl+↓ (vagy Ctrl+görgő). Dupla katt: 24h ki/be. Shift+dupla: másodperc ki/be. Hotkeys: Shift+T óra ki/be, Shift+R reset óra."
-      },
-      helpHtml: `
-        <div style="font-weight:900;margin-bottom:6px">⌨️ Gyorsbillentyűk</div>
-        <div><b>Shift+F</b> panel ki/be</div>
-        <div><b>ESC</b> bezár</div>
-        <div><b>Shift+1/2/3</b> Preset A/B/C</div>
-        <div><b>Shift+M</b> Safe Mode ki/be</div>
-        <div><b>Shift+H</b> Súgó ki/be</div>
-        <div style="margin-top:8px;opacity:.8">Tipp: ahol a név mellett ott a kis “sliders” ikon, ott vannak extra beállítások.</div>
-      `,
-      alerts: {
-        invalidJson: "❌ A fájl nem érvényes JSON",
-        invalidPreset: "❌ Hibás preset formátum",
-      },
-      toasts: {
-        preset: (p)=>`Preset ${p} ✓`,
-        export: "Export ✓",
-        import: "Import ✓",
-        posSaved: "Panel pozíció mentve ✓",
-        btnPosSaved: "Fő gomb helye mentve ✓",
-        posReset: "Panel pozíció reset ✓",
-        btnPosReset: "Fő gomb helye reset ✓",
-        safeOn: "Safe Mode ✓",
-        safeOff: "Safe Mode OFF",
-        compactOn: "Kompakt ✓",
-        compactOff: "Kompakt OFF",
-        resetTab: "Reset ✓",
-        resetPreset: "Preset reset ✓",
-        resetAll: "Reset ✓",
-        marker: "Marker ✓",
-        clockOn: "Óra ON ✓",
-        clockOff: "Óra OFF",
-        clockSaved: "Óra mentve ✓",
-        skinOn: "Skin ON ✓",
-        skinOff: "Skin OFF",
-        skinWarn: "Skin: Autodarts frissült? (CSS szelektor eltérés gyanú) – lehet, hogy frissíteni kell a Skin CSS-t.",
-        lang: "Nyelv frissítve ✓",
-        skinAutoOff: "Skin AUTO-OFF (selector eltérés) ✓",
-      }
-    },
-
-    en: {
-      appTitle: "🎯 Autodarts CORE",
-      modulesTitle: "Toggles / modules",
-      help: "Help",
-      close: "Close",
-      export: "Export",
-      import: "Import",
-      activeRefresh: "Active refresh (ms)",
-      activeRefreshHint: "Active-player detection polling. 0 = DOM only. If it lags sometimes, try 100–200ms.",
-      preset: "Preset",
-      reset: "Reset",
-      resetPreset: "Reset Preset",
-      resetAll: "RESET ALL",
-      resetAllConfirm: "Reset everything to defaults? (Presets + UI)",
-      saved: "Saved ✓",
-      posReset: "Reset panel position",
-      btnPosReset: "Reset main button pos",
-      safeMode: "Safe Mode (recommended)",
-      compact: "Compact mode",
-      hotkeysLine: "Hotkeys: Shift+F panel • Shift+1/2/3 preset • Shift+M Safe • Shift+H help • ESC close",
-      hintConfig: "Settings →",
-      iconConfigTitle: "Configurable (click row)",
-      markerNow: "Refresh marker now",
-      markerInfo: "Board marker: marks the board SVG (ad-board-svg). Keep ON if your custom board skin relies on it.",
-      bmInfo: "Adds a 'Back to Autodarts' button on /boards (useful in touchscreen/fullscreen).",
-      bmBackLabel: "Back to Autodarts",
-      skinInfo: "Skin/Layout: If you use Stylebot on this site, turn it off because it can conflict with this userscript. (After Autodarts updates, the css-xxxxx class names may change; then the CSS selectors must be updated.)",
-      diagCopy: "Copy debug info",
-      diagSelectors: "Selector check",
-      diagOk: "OK",
-      diagMissing: "MISSING",
-      diagOptional: "OPTIONAL",
-      tab: {
-        general:  "General",
-        skin:     "Skin / Layout",
-        board:    "Utility – Board Marker",
-        bmback:   "Utility – Back Button (/boards)",
-        throws:   "Display – Throw Points",
-        orig:     "Display – Corner Label (T20)",
-        total:    "Display – Total",
-        checkout: "Display – Checkout Tip",
-        active:   "Highlight – Active Player",
-        triple:   "Animation – Triple Hit",
-        win:      "Sound – Win",
-        clock:    "Widget – Clock",
-        diag: "Diagnostics",
-      },
-      fields: {
-        bg: "Background",
-        bgOpacity: "Background opacity",
-        hoverBg: "Hover background",
-        hoverOpacity: "Hover opacity",
-        fontSize: "Font size",
-        color: "Color",
-        opacity: "Opacity",
-        outline: "Outline size",
-        glow: "Glow strength",
-        highlightSpeed: "Highlight speed",
-        numberAnim: "Number animation",
-        rattleDur: "Rattle duration",
-        rattleDelay: "Rattle delay",
-        volume: "Volume",
-      },
-      totalInfo: "Fix: Total uses an overlay so settings always apply and card height won’t change.",
-      skinText: {
-        uiScale: "UI scale",
-        spacing: "Player spacing",
-        playerBg: "Player card background",
-        playerBgOpacity: "Player background opacity",
-        bgUrl: "Background image URL",
-        overlay: "Overlay opacity",
-        autoDisable: "Auto-disable if selectors mismatch after update (recommended)",
-      },
-      clockText: {
-        enabled: "Enable clock",
-        scale: "Scale",
-        bg: "Background",
-        bgAlpha: "Background opacity",
-        text: "Text color",
-        format24: "24-hour format",
-        seconds: "Show seconds",
-        resetLook: "Reset clock style",
-        resetPos: "Reset clock position",
-        hint: "Move: drag the clock. Scale: Ctrl+↑ / Ctrl+↓ (or Ctrl+wheel). Double-click: 24h toggle. Shift+double: seconds toggle. Hotkeys: Shift+T clock toggle, Shift+R reset clock."
-      },
-      helpHtml: `
-        <div style="font-weight:900;margin-bottom:6px">⌨️ Hotkeys</div>
-        <div><b>Shift+F</b> panel toggle</div>
-        <div><b>ESC</b> close</div>
-        <div><b>Shift+1/2/3</b> Preset A/B/C</div>
-        <div><b>Shift+M</b> Safe Mode toggle</div>
-        <div><b>Shift+H</b> Help toggle</div>
-        <div style="margin-top:8px;opacity:.8">Tip: modules with the small “sliders” icon next to the name have extra settings.</div>
-      `,
-      alerts: {
-        invalidJson: "❌ File is not valid JSON",
-        invalidPreset: "❌ Invalid preset format",
-      },
-      toasts: {
-        preset: (p)=>`Preset ${p} ✓`,
-        export: "Export ✓",
-        import: "Import ✓",
-        posSaved: "Panel position saved ✓",
-        btnPosSaved: "Main button position saved ✓",
-        posReset: "Panel position reset ✓",
-        btnPosReset: "Main button reset ✓",
-        safeOn: "Safe Mode ✓",
-        safeOff: "Safe Mode OFF",
-        compactOn: "Compact ✓",
-        compactOff: "Compact OFF",
-        resetTab: "Reset ✓",
-        resetPreset: "Preset reset ✓",
-        resetAll: "Reset ✓",
-        marker: "Marker ✓",
-        clockOn: "Clock ON ✓",
-        clockOff: "Clock OFF",
-        clockSaved: "Clock saved ✓",
-        skinOn: "Skin ON ✓",
-        skinOff: "Skin OFF",
-        skinWarn: "Skin: Autodarts update? (selector mismatch) – the Skin CSS selectors may need an update.",
-        lang: "Language updated ✓",
-        skinAutoOff: "Skin AUTO-OFF (selector mismatch) ✓",
-      }
-    },
-	
-	pl: {
+    pl: {
   appTitle: "🎯 Autodarts CORE",
   modulesTitle: "Przełączniki / moduły",
   help: "Pomoc",
@@ -528,137 +278,135 @@
     skinAutoOff: "Skin AUTO-WYŁ. (niezgodność selektorów) ✓",
   }
 },
-
-
-    de: {
+    en: {
       appTitle: "🎯 Autodarts CORE",
-      modulesTitle: "Schalter / Module",
-      help: "Hilfe",
-      close: "Schließen",
+      modulesTitle: "Toggles / modules",
+      help: "Help",
+      close: "Close",
       export: "Export",
       import: "Import",
-      activeRefresh: "Aktualisierung aktiv (ms)",
-      activeRefreshHint: "Erkennung aktiver Spieler (Polling). 0 = nur DOM. Wenn es verzögert: 100–200ms.",
+      activeRefresh: "Active refresh (ms)",
+      activeRefreshHint: "Active-player detection polling. 0 = DOM only. If it lags sometimes, try 100–200ms.",
       preset: "Preset",
       reset: "Reset",
-      resetPreset: "Preset zurücksetzen",
-      resetAll: "ALLES RESET",
-      resetAllConfirm: "Alles auf Standard zurücksetzen? (Presets + UI)",
-      saved: "Gespeichert ✓",
-      posReset: "Panel-Position reset",
-      btnPosReset: "Hauptbutton-Pos reset",
-      safeMode: "Safe Mode (empfohlen)",
-      compact: "Kompaktmodus",
-      hotkeysLine: "Hotkeys: Shift+F Panel • Shift+1/2/3 Preset • Shift+M Safe • Shift+H Hilfe • ESC schließen",
-      hintConfig: "Einstellungen →",
-      iconConfigTitle: "Einstellbar (Zeile klicken)",
-      markerNow: "Marker jetzt aktualisieren",
-      markerInfo: "Board Marker: markiert das Board-SVG (ad-board-svg). Anlassen, wenn dein Board-Skin darauf basiert.",
-      bmInfo: "Fügt auf /boards einen 'Zurück zu Autodarts' Button hinzu (für Touch/Fullscreen hilfreich).",
-      bmBackLabel: "Zurück zu Autodarts",
-      skinInfo: "Skin/Layout: Wenn du Stylebot auf dieser Seite verwendest, schalte ihn aus, weil er mit diesem Userscript kollidieren kann. (Nach Autodarts-Updates können sich css-xxxxx Klassennamen ändern; dann müssen die CSS-Selektoren aktualisiert werden.)",
-      diagCopy: "Debug-Info kopieren",
-      diagSelectors: "Selektor-Check",
+      resetPreset: "Reset Preset",
+      resetAll: "RESET ALL",
+      resetAllConfirm: "Reset everything to defaults? (Presets + UI)",
+      saved: "Saved ✓",
+      posReset: "Reset panel position",
+      btnPosReset: "Reset main button pos",
+      safeMode: "Safe Mode (recommended)",
+      compact: "Compact mode",
+      hotkeysLine: "Hotkeys: Shift+F panel • Shift+1/2/3 preset • Shift+M Safe • Shift+H help • ESC close",
+      hintConfig: "Settings →",
+      iconConfigTitle: "Configurable (click row)",
+      markerNow: "Refresh marker now",
+      markerInfo: "Board marker: marks the board SVG (ad-board-svg). Keep ON if your custom board skin relies on it.",
+      bmInfo: "Adds a 'Back to Autodarts' button on /boards (useful in touchscreen/fullscreen).",
+      bmBackLabel: "Back to Autodarts",
+      skinInfo: "Skin/Layout: If you use Stylebot on this site, turn it off because it can conflict with this userscript. (After Autodarts updates, the css-xxxxx class names may change; then the CSS selectors must be updated.)",
+      diagCopy: "Copy debug info",
+      diagSelectors: "Selector check",
       diagOk: "OK",
-      diagMissing: "FEHLT",
+      diagMissing: "MISSING",
       diagOptional: "OPTIONAL",
       tab: {
-        general:  "Allgemein",
+        general:  "General",
         skin:     "Skin / Layout",
-        board:    "Werkzeug – Board Marker",
-        bmback:   "Werkzeug – Zurück-Button (/boards)",
-        throws:   "Anzeige – Wurfpunkte",
-        orig:     "Anzeige – Eckenlabel (T20)",
-        total:    "Anzeige – Gesamtwert",
-        checkout: "Anzeige – Checkout-Tipp",
-        active:   "Hervorhebung – Aktiver Spieler",
-        triple:   "Animation – Triple-Treffer",
-        win:      "Sound – Sieg",
-        clock:    "Widget – Uhr",
-        diag: "Diagnose",
+        board:    "Utility – Board Marker",
+        bmback:   "Utility – Back Button (/boards)",
+        throws:   "Display – Throw Points",
+        orig:     "Display – Corner Label (T20)",
+        total:    "Display – Total",
+        checkout: "Display – Checkout Tip",
+        active:   "Highlight – Active Player",
+        triple:   "Animation – Triple Hit",
+        win:      "Sound – Win",
+        clock:    "Widget – Clock",
+        diag: "Diagnostics",
       },
       fields: {
-        bg: "Hintergrund",
-        bgOpacity: "Hintergrund-Transparenz",
-        hoverBg: "Hover Hintergrund",
-        hoverOpacity: "Hover Transparenz",
-        fontSize: "Schriftgröße",
-        color: "Farbe",
-        opacity: "Transparenz",
-        outline: "Rahmenstärke",
-        glow: "Glow Stärke",
-        highlightSpeed: "Highlight Speed",
-        numberAnim: "Zahlenanimation",
-        rattleDur: "Wackeln Dauer",
-        rattleDelay: "Wackeln Verzögerung",
-        volume: "Lautstärke",
+        bg: "Background",
+        bgOpacity: "Background opacity",
+        hoverBg: "Hover background",
+        hoverOpacity: "Hover opacity",
+        fontSize: "Font size",
+        color: "Color",
+        opacity: "Opacity",
+        outline: "Outline size",
+        glow: "Glow strength",
+        highlightSpeed: "Highlight speed",
+        numberAnim: "Number animation",
+        rattleDur: "Rattle duration",
+        rattleDelay: "Rattle delay",
+        volume: "Volume",
       },
-      totalInfo: "Fix: Total nutzt ein Overlay – Einstellungen wirken immer, Kartenhöhe bleibt stabil.",
+      totalInfo: "Fix: Total uses an overlay so settings always apply and card height won’t change.",
       skinText: {
-        uiScale: "UI Skalierung",
-        spacing: "Spieler-Abstand",
-        playerBg: "Player-Karten Hintergrund",
-        playerBgOpacity: "Player-Hintergrund Transparenz",
-        bgUrl: "Hintergrundbild URL",
-        overlay: "Overlay-Transparenz",
-        autoDisable: "Auto-Deaktivieren bei Selektor-Mismatch nach Update (empfohlen)",
+        uiScale: "UI scale",
+        spacing: "Player spacing",
+        playerBg: "Player card background",
+        playerBgOpacity: "Player background opacity",
+        bgUrl: "Background image URL",
+        overlay: "Overlay opacity",
+        autoDisable: "Auto-disable if selectors mismatch after update (recommended)",
       },
       clockText: {
-        enabled: "Uhr aktivieren",
-        scale: "Größe",
-        bg: "Hintergrund",
-        bgAlpha: "Hintergrund-Transparenz",
-        text: "Textfarbe",
-        format24: "24h Format",
-        seconds: "Sekunden anzeigen",
-        resetLook: "Uhr-Stil Reset",
-        resetPos: "Uhr-Position Reset",
-        hint: "Bewegen: Uhr ziehen. Größe: Ctrl+↑ / Ctrl+↓ (oder Ctrl+Rad). Doppelklick: 24h Toggle. Shift+Doppelklick: Sekunden Toggle. Hotkeys: Shift+T Uhr Toggle, Shift+R Uhr Reset."
+        enabled: "Enable clock",
+        scale: "Scale",
+        bg: "Background",
+        bgAlpha: "Background opacity",
+        text: "Text color",
+        format24: "24-hour format",
+        seconds: "Show seconds",
+        resetLook: "Reset clock style",
+        resetPos: "Reset clock position",
+        hint: "Move: drag the clock. Scale: Ctrl+↑ / Ctrl+↓ (or Ctrl+wheel). Double-click: 24h toggle. Shift+double: seconds toggle. Hotkeys: Shift+T clock toggle, Shift+R reset clock."
       },
       helpHtml: `
         <div style="font-weight:900;margin-bottom:6px">⌨️ Hotkeys</div>
-        <div><b>Shift+F</b> Panel ein/aus</div>
-        <div><b>ESC</b> schließen</div>
+        <div><b>Shift+F</b> panel toggle</div>
+        <div><b>ESC</b> close</div>
         <div><b>Shift+1/2/3</b> Preset A/B/C</div>
-        <div><b>Shift+M</b> Safe Mode</div>
-        <div><b>Shift+H</b> Hilfe</div>
-        <div style="margin-top:8px;opacity:.8">Tipp: Module mit dem kleinen “Sliders”-Icon neben dem Namen haben Extra-Einstellungen.</div>
+        <div><b>Shift+M</b> Safe Mode toggle</div>
+        <div><b>Shift+H</b> Help toggle</div>
+        <div style="margin-top:8px;opacity:.8">Tip: modules with the small “sliders” icon next to the name have extra settings.</div>
       `,
       alerts: {
-        invalidJson: "❌ Datei ist kein gültiges JSON",
-        invalidPreset: "❌ Ungültiges Preset-Format",
+        invalidJson: "❌ File is not valid JSON",
+        invalidPreset: "❌ Invalid preset format",
       },
       toasts: {
         preset: (p)=>`Preset ${p} ✓`,
         export: "Export ✓",
         import: "Import ✓",
-        posSaved: "Panel-Position gespeichert ✓",
-        btnPosSaved: "Hauptbutton-Pos gespeichert ✓",
-        posReset: "Panel-Pos reset ✓",
-        btnPosReset: "Button reset ✓",
+        posSaved: "Panel position saved ✓",
+        btnPosSaved: "Main button position saved ✓",
+        posReset: "Panel position reset ✓",
+        btnPosReset: "Main button reset ✓",
         safeOn: "Safe Mode ✓",
         safeOff: "Safe Mode OFF",
-        compactOn: "Kompakt ✓",
-        compactOff: "Kompakt OFF",
+        compactOn: "Compact ✓",
+        compactOff: "Compact OFF",
         resetTab: "Reset ✓",
         resetPreset: "Preset reset ✓",
         resetAll: "Reset ✓",
         marker: "Marker ✓",
-        clockOn: "Uhr AN ✓",
-        clockOff: "Uhr AUS",
-        clockSaved: "Uhr gespeichert ✓",
-        skinOn: "Skin AN ✓",
-        skinOff: "Skin AUS",
-        skinWarn: "Skin: Autodarts Update? (Selektor passt nicht) – ggf. Skin-CSS-Selektoren aktualisieren.",
-        lang: "Sprache aktualisiert ✓",
-        skinAutoOff: "Skin AUTO-AUS (Selektor-Mismatch) ✓",
+        clockOn: "Clock ON ✓",
+        clockOff: "Clock OFF",
+        clockSaved: "Clock saved ✓",
+        skinOn: "Skin ON ✓",
+        skinOff: "Skin OFF",
+        skinWarn: "Skin: Autodarts update? (selector mismatch) – the Skin CSS selectors may need an update.",
+        lang: "Language updated ✓",
+        skinAutoOff: "Skin AUTO-OFF (selector mismatch) ✓",
       }
     }
   };
 
   function lang() {
     const l = state?.ui?.lang;
-    return (l === "en" || l === "de") ? l : "hu";
+    return (l === "pl" || l === "en") ? l : "pl";
   }
   function T() { return I18N[lang()]; }
 
@@ -794,7 +542,7 @@
 
     out.ui = { ...out.ui, ...(st?.ui || {}) };
     out.ui.clock = { ...clone(DEFAULT_CLOCK), ...(st?.ui?.clock || {}) };
-    out.ui.lang = (out.ui.lang === "en" || out.ui.lang === "de") ? out.ui.lang : "hu";
+    out.ui.lang = (out.ui.lang === "pl" || out.ui.lang === "en") ? out.ui.lang : "pl";
 
     out.presets = (Array.isArray(st?.presets) && st.presets.length === 3)
       ? st.presets.map(p => ({ ...clone(DEFAULT_CFG), ...(p || {}) }))
@@ -2508,7 +2256,7 @@ function scanWinMusic() {
     clockEl.style.top  = Math.round(safe.y) + "px";
   }
 
-  // ✅ locale követi a nyelvet (hu-HU / en-US / de-DE)
+  // ✅ locale követi a nyelvet (pl-PL / en-US)
   function renderClockTime() {
     if (!clockTimeEl) return;
     const cs = state.ui.clock;
@@ -2521,7 +2269,7 @@ function scanWinMusic() {
     };
     if (!cs.showSeconds) delete opts.second;
 
-    const loc = (state.ui.lang === "en") ? "en-US" : (state.ui.lang === "de" ? "de-DE" : "hu-HU");
+    const loc = (state.ui.lang === "en") ? "en-US" : (state.ui.lang === "pl" ? "pl-PL" : "pl-PL");
     clockTimeEl.textContent = new Date().toLocaleTimeString(loc, opts);
   }
 
@@ -2798,7 +2546,7 @@ function ensureMainButtonPosition() {
 
   // ✅ Teljes nyelvfrissítés: panel + tooltip + /boards gomb + óra locale + toast
   function setLang(newLang) {
-    state.ui.lang = (newLang === "en" || newLang === "de") ? newLang : "hu";
+    state.ui.lang = (newLang === "pl" || newLang === "en") ? newLang : "pl";
     saveStateDebounced();
 
     if (uiBtn) uiBtn.title = `${T().appTitle} (Shift+F)`;
@@ -3215,18 +2963,16 @@ function ensureMainButtonPosition() {
     langWrap.style.display = "flex";
     langWrap.style.gap = "6px";
 
-    const btnHU = mkButton("HU", () => setLang("hu"), state.ui.lang === "hu" ? "primary" : "ghost", compact);
+    const btnPL = mkButton("PL", () => setLang("pl"), state.ui.lang === "pl" ? "primary" : "ghost", compact);
     const btnEN = mkButton("EN", () => setLang("en"), state.ui.lang === "en" ? "primary" : "ghost", compact);
-    const btnDE = mkButton("DE", () => setLang("de"), state.ui.lang === "de" ? "primary" : "ghost", compact);
 
-    [btnHU, btnEN, btnDE].forEach(b => {
+    [btnPL, btnEN].forEach(b => {
       b.style.padding = compact ? "7px 9px" : "8px 10px";
       b.style.borderRadius = "999px";
     });
 
-    langWrap.appendChild(btnHU);
+    langWrap.appendChild(btnPL);
     langWrap.appendChild(btnEN);
-    langWrap.appendChild(btnDE);
 
     const helpBtn = mkButton(state.ui.helpOpen ? "✕" : "❓", () => {
       state.ui.helpOpen = !state.ui.helpOpen;
