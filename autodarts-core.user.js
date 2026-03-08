@@ -155,9 +155,9 @@
   import: "Import",
   activeRefresh: "Aktywne odświeżanie (ms)",
   activeRefreshHint: "Odpytywanie wykrywania aktywnego gracza. 0 = tylko DOM. Jeśli czasem się zacina, spróbuj 100–200 ms.",
-  preset: "Preset",
+  preset: "Ustawienia",
   reset: "Reset",
-  resetPreset: "Resetuj preset",
+  resetPreset: "Resetuj Ustawienia",
   resetAll: "RESETUJ WSZYSTKO",
   resetAllConfirm: "Zresetować wszystko do domyślnych ustawień? (Presety + UI)",
   saved: "Zapisano ✓",
@@ -165,7 +165,7 @@
   btnPosReset: "Resetuj pozycję głównego przycisku",
   safeMode: "Tryb bezpieczny (zalecane)",
   compact: "Tryb kompaktowy",
-  hotkeysLine: "Skróty: Shift+F panel • Shift+1/2/3 preset • Shift+M Bezpieczny • Shift+H pomoc • ESC zamknij",
+  hotkeysLine: "Skróty: Shift+F panel • Shift+1/2/3 Ustawienia • Shift+M Bezpieczny • Shift+H pomoc • ESC zamknij",
   hintConfig: "Ustawienia →",
   iconConfigTitle: "Konfigurowalne (kliknij wiersz)",
   markerNow: "Odśwież marker teraz",
@@ -241,7 +241,7 @@
     <div style="font-weight:900;margin-bottom:6px">⌨️ Skróty klawiszowe</div>
     <div><b>Shift+F</b> przełącz panel</div>
     <div><b>ESC</b> zamknij</div>
-    <div><b>Shift+1/2/3</b> Preset A/B/C</div>
+    <div><b>Shift+1/2/3</b> Ustawienia A/B/C</div>
     <div><b>Shift+M</b> przełącz Tryb Bezpieczny</div>
     <div><b>Shift+H</b> przełącz pomoc</div>
     <div style="margin-top:8px;opacity:.8">Wskazówka: moduły z ikoną „suwaków” mają dodatkowe ustawienia.</div>
@@ -249,11 +249,11 @@
 
   alerts: {
     invalidJson: "❌ Plik nie jest poprawnym JSON-em",
-    invalidPreset: "❌ Nieprawidłowy format presetu",
+    invalidPreset: "❌ Nieprawidłowy format ustawień",
   },
 
   toasts: {
-    preset: (p)=>`Preset ${p} ✓`,
+    preset: (p)=>`Ustawienia ${p} ✓`,
     export: "Eksport ✓",
     import: "Import ✓",
     posSaved: "Pozycja panelu zapisana ✓",
@@ -265,7 +265,7 @@
     compactOn: "Kompaktowy ✓",
     compactOff: "Kompaktowy WYŁ.",
     resetTab: "Reset ✓",
-    resetPreset: "Preset zresetowany ✓",
+    resetPreset: "Ustawienia zresetowane ✓",
     resetAll: "Reset ✓",
     marker: "Marker ✓",
     clockOn: "Zegar WŁ. ✓",
