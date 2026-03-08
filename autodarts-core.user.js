@@ -133,7 +133,7 @@
     safeMode: true,
     compact: false,
     helpOpen: false,
-    lang: "hu",              // hu | en | de
+    lang: "pl",              // hu | en | de
     clock: clone(DEFAULT_CLOCK),
   };
 
@@ -395,6 +395,140 @@
         skinAutoOff: "Skin AUTO-OFF (selector mismatch) ✓",
       }
     },
+	
+	pl: {
+  appTitle: "🎯 Autodarts CORE",
+  modulesTitle: "Przełączniki / moduły",
+  help: "Pomoc",
+  close: "Zamknij",
+  export: "Eksport",
+  import: "Import",
+  activeRefresh: "Aktywne odświeżanie (ms)",
+  activeRefreshHint: "Odpytywanie wykrywania aktywnego gracza. 0 = tylko DOM. Jeśli czasem się zacina, spróbuj 100–200 ms.",
+  preset: "Preset",
+  reset: "Reset",
+  resetPreset: "Resetuj preset",
+  resetAll: "RESETUJ WSZYSTKO",
+  resetAllConfirm: "Zresetować wszystko do domyślnych ustawień? (Presety + UI)",
+  saved: "Zapisano ✓",
+  posReset: "Resetuj pozycję panelu",
+  btnPosReset: "Resetuj pozycję głównego przycisku",
+  safeMode: "Tryb bezpieczny (zalecane)",
+  compact: "Tryb kompaktowy",
+  hotkeysLine: "Skróty: Shift+F panel • Shift+1/2/3 preset • Shift+M Bezpieczny • Shift+H pomoc • ESC zamknij",
+  hintConfig: "Ustawienia →",
+  iconConfigTitle: "Konfigurowalne (kliknij wiersz)",
+  markerNow: "Odśwież marker teraz",
+  markerInfo: "Marker tablicy: oznacza SVG tablicy (ad-board-svg). Pozostaw WŁ., jeśli Twój własny skin tablicy tego wymaga.",
+  bmInfo: "Dodaje przycisk „Powrót do Autodarts” na /boards (przydatne na ekranach dotykowych / fullscreen).",
+  bmBackLabel: "Powrót do Autodarts",
+  skinInfo: "Skin/Layout: Jeśli używasz Stylebot na tej stronie, wyłącz go — może powodować konflikty z tym userscriptem. (Po aktualizacjach Autodarts nazwy klas css-xxxxx mogą się zmienić; wtedy selektory CSS trzeba zaktualizować.)",
+  diagCopy: "Kopiuj dane diagnostyczne",
+  diagSelectors: "Sprawdzenie selektorów",
+  diagOk: "OK",
+  diagMissing: "BRAK",
+  diagOptional: "OPCJONALNE",
+
+  tab: {
+    general:  "Ogólne",
+    skin:     "Skin / Układ",
+    board:    "Narzędzia – Marker tablicy",
+    bmback:   "Narzędzia – Przycisk powrotu (/boards)",
+    throws:   "Wyświetlanie – Punkty rzutów",
+    orig:     "Wyświetlanie – Etykieta narożna (T20)",
+    total:    "Wyświetlanie – Total",
+    checkout: "Wyświetlanie – Podpowiedź checkout",
+    active:   "Podświetlenie – Aktywny gracz",
+    triple:   "Animacja – Trafienie potrójne",
+    win:      "Dźwięk – Wygrana",
+    clock:    "Widget – Zegar",
+    diag:     "Diagnostyka",
+  },
+
+  fields: {
+    bg: "Tło",
+    bgOpacity: "Przezroczystość tła",
+    hoverBg: "Tło po najechaniu",
+    hoverOpacity: "Przezroczystość po najechaniu",
+    fontSize: "Rozmiar czcionki",
+    color: "Kolor",
+    opacity: "Przezroczystość",
+    outline: "Grubość obramowania",
+    glow: "Siła poświaty",
+    highlightSpeed: "Szybkość podświetlenia",
+    numberAnim: "Animacja liczb",
+    rattleDur: "Czas trzęsienia",
+    rattleDelay: "Opóźnienie trzęsienia",
+    volume: "Głośność",
+  },
+
+  totalInfo: "Poprawka: Total używa nakładki, więc ustawienia zawsze działają i wysokość karty się nie zmienia.",
+
+  skinText: {
+    uiScale: "Skala UI",
+    spacing: "Odstęp między graczami",
+    playerBg: "Tło karty gracza",
+    playerBgOpacity: "Przezroczystość tła gracza",
+    bgUrl: "URL tła",
+    overlay: "Przezroczystość nakładki",
+    autoDisable: "Automatyczne wyłączenie przy niezgodności selektorów po aktualizacji (zalecane)",
+  },
+
+  clockText: {
+    enabled: "Włącz zegar",
+    scale: "Skala",
+    bg: "Tło",
+    bgAlpha: "Przezroczystość tła",
+    text: "Kolor tekstu",
+    format24: "Format 24h",
+    seconds: "Pokaż sekundy",
+    resetLook: "Resetuj wygląd zegara",
+    resetPos: "Resetuj pozycję zegara",
+    hint: "Przesuwanie: przeciągnij zegar. Skala: Ctrl+↑ / Ctrl+↓ (lub Ctrl+scroll). Podwójne kliknięcie: przełącz 24h. Shift+podwójne: sekundy. Skróty: Shift+T przełącz zegar, Shift+R reset zegara."
+  },
+
+  helpHtml: `
+    <div style="font-weight:900;margin-bottom:6px">⌨️ Skróty klawiszowe</div>
+    <div><b>Shift+F</b> przełącz panel</div>
+    <div><b>ESC</b> zamknij</div>
+    <div><b>Shift+1/2/3</b> Preset A/B/C</div>
+    <div><b>Shift+M</b> przełącz Tryb Bezpieczny</div>
+    <div><b>Shift+H</b> przełącz pomoc</div>
+    <div style="margin-top:8px;opacity:.8">Wskazówka: moduły z ikoną „suwaków” mają dodatkowe ustawienia.</div>
+  `,
+
+  alerts: {
+    invalidJson: "❌ Plik nie jest poprawnym JSON-em",
+    invalidPreset: "❌ Nieprawidłowy format presetu",
+  },
+
+  toasts: {
+    preset: (p)=>`Preset ${p} ✓`,
+    export: "Eksport ✓",
+    import: "Import ✓",
+    posSaved: "Pozycja panelu zapisana ✓",
+    btnPosSaved: "Pozycja przycisku zapisana ✓",
+    posReset: "Pozycja panelu zresetowana ✓",
+    btnPosReset: "Przycisk zresetowany ✓",
+    safeOn: "Tryb bezpieczny ✓",
+    safeOff: "Tryb bezpieczny WYŁ.",
+    compactOn: "Kompaktowy ✓",
+    compactOff: "Kompaktowy WYŁ.",
+    resetTab: "Reset ✓",
+    resetPreset: "Preset zresetowany ✓",
+    resetAll: "Reset ✓",
+    marker: "Marker ✓",
+    clockOn: "Zegar WŁ. ✓",
+    clockOff: "Zegar WYŁ.",
+    clockSaved: "Zegar zapisany ✓",
+    skinOn: "Skin WŁ. ✓",
+    skinOff: "Skin WYŁ.",
+    skinWarn: "Skin: aktualizacja Autodarts? (niezgodność selektorów) – selektory CSS mogą wymagać aktualizacji.",
+    lang: "Język zaktualizowany ✓",
+    skinAutoOff: "Skin AUTO-WYŁ. (niezgodność selektorów) ✓",
+  }
+},
+
 
     de: {
       appTitle: "🎯 Autodarts CORE",
