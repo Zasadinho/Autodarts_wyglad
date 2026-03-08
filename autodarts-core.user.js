@@ -551,7 +551,7 @@
     out.schemaVersion = STATE_SCHEMA_VERSION;
     return out;
   }
-
+ 
   function migrateToState(obj) {
     if (obj && obj.state) return migrateToState(obj.state);
     if (obj && typeof obj === "object" && Array.isArray(obj.presets) && obj.presets.length === 3 && obj.ui) return normalizeState(obj);
