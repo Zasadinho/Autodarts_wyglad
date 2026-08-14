@@ -1,6 +1,6 @@
 # Install guide — Autodarts CORE (userscript)
 
-Autodarts CORE is a userscript for **https://play.autodarts.io/**.
+Autodarts CORE is a userscript for **https://play.autodarts.com/**.
 You install it with a userscript manager (Violentmonkey / Tampermonkey), then it updates like any other script.
 
 ---
@@ -22,7 +22,7 @@ Why DIST?
 2. Open the DIST URL in a new tab:  
    https://raw.githubusercontent.com/Szala86/Autodarts-core/main/dist/autodarts-core.user.js
 3. Violentmonkey will show an **Install** page → click **Install**.
-4. Go to Autodarts: https://play.autodarts.io/  
+4. Go to Autodarts: https://play.autodarts.com/  
    Open a match page and press **Shift+F** (panel toggle).
 
 ---

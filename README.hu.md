@@ -43,8 +43,8 @@ Moduláris userscript **play.autodarts.io**-hoz, ami egy állítható **CORE pan
 ---
 
 ## Támogatott oldalak
-- Meccs UI: `https://play.autodarts.io/matches/...`
-- Boards oldal (opcionális vissza gomb): `https://play.autodarts.io/boards`
+- Meccs UI: `https://play.autodarts.com/matches/...`
+- Boards oldal (opcionális vissza gomb): `https://play.autodarts.com/boards`
 
 ---
 

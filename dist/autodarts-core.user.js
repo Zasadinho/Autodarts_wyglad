@@ -3,7 +3,7 @@
 // @namespace    autodarts.core.szala
 // @author       Szala/AI
 // @version      2.5.6
-// @match        https://play.autodarts.io/*
+// @match        https://play.autodarts.com/*
 // @run-at       document-start
 // @grant        none
 // @inject-into  content
@@ -1652,7 +1652,7 @@ svg.ad-board-svg text{
 
     const a = document.createElement("a");
     a.id = BM_BTN_ID;
-    a.href = "https://play.autodarts.io/";
+    a.href = "https://play.autodarts.com/";
     a.target = "_self";
     a.rel = "noopener";
     Object.assign(a.style, {

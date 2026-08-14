@@ -41,8 +41,8 @@ A modular userscript for **play.autodarts.io** that adds a configurable **CORE p
 ---
 
 ## Supported pages
-- Match UI: `https://play.autodarts.io/matches/...`
-- Boards page (optional back button): `https://play.autodarts.io/boards`
+- Match UI: `https://play.autodarts.com/matches/...`
+- Boards page (optional back button): `https://play.autodarts.com/boards`
 
 ---
 

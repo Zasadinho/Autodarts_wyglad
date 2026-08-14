@@ -43,8 +43,8 @@ Ein modulares Userscript für **play.autodarts.io**, das ein konfigurierbares **
 ---
 
 ## Unterstützte Seiten
-- Match UI: `https://play.autodarts.io/matches/...`
-- Boards-Seite (optional): `https://play.autodarts.io/boards`
+- Match UI: `https://play.autodarts.com/matches/...`
+- Boards-Seite (optional): `https://play.autodarts.com/boards`
 
 ---
 

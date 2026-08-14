@@ -1,6 +1,6 @@
 # Development notes — Autodarts CORE
 
-This repo contains a userscript for https://play.autodarts.io/
+This repo contains a userscript for https://play.autodarts.com/
 
 ---
 
@@ -63,7 +63,7 @@ Reason:
    - copy `src/autodarts-core.user.js` → `dist/autodarts-core.user.js`
 
 4. **Quick sanity test**
-   - Open https://play.autodarts.io/
+   - Open https://play.autodarts.com/
    - Enter a match (`/matches/...`)
    - Check:
      - panel opens (Shift+F)

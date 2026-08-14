@@ -39,8 +39,8 @@ Opcjonalny przycisk „Powrót do Autodarts” na stronie `/boards`
 ---
 
 ## Obsługiwane strony
-Interfejs meczu: https://play.autodarts.io/matches/...
-Strona tablic (opcjonalny przycisk powrotu): https://play.autodarts.io/boards
+Interfejs meczu: https://play.autodarts.com/matches/...
+Strona tablic (opcjonalny przycisk powrotu): https://play.autodarts.com/boards
 
 ---
 
