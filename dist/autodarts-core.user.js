@@ -1,17 +1,17 @@
 // ==UserScript==
-// @name         Autodarts – CORE
-// @namespace    autodarts.core.szala
-// @author       Szala/AI
+// @name         Autodarts – eDart Polska
+// @namespace    zasadinho
+// @author       Zasada
 // @version      2.5.6
 // @match        https://play.autodarts.com/*
 // @run-at       document-start
 // @grant        none
 // @inject-into  content
-// @homepageURL  https://github.com/Szala86/Autodarts-core
-// @supportURL   https://github.com/Szala86/Autodarts-core/issues
-// @downloadURL  https://raw.githubusercontent.com/Szala86/Autodarts-core/main/dist/autodarts-core.user.js
-// @updateURL    https://raw.githubusercontent.com/Szala86/Autodarts-core/main/dist/autodarts-core.user.js
-// @description  CORE panel with presets + HU/EN/DE + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
+// @homepageURL  https://https://github.com/Zasadinho/Autodarts_wyglad
+// @supportURL   https://github.com/Zasadinho/Autodarts_wyglad/issues
+// @downloadURL  https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+// @updateURL    https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+// @description  eDart Polska panel with presets + PL/EN + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
 // ==/UserScript==
 
 (() => {
@@ -147,7 +147,7 @@
   /* ================== I18N ================== */
   const I18N = {
     hu: {
-      appTitle: "🎯 Autodarts CORE",
+      appTitle: "🎯 Autodarts eDart Polska",
       modulesTitle: "Kapcsolók / modulok",
       help: "Súgó",
       close: "Bezár",
@@ -272,7 +272,7 @@
     },
 
     en: {
-      appTitle: "🎯 Autodarts CORE",
+      appTitle: "🎯 Autodarts eDart Polska",
       modulesTitle: "Toggles / modules",
       help: "Help",
       close: "Close",
@@ -397,7 +397,7 @@
     },
 
     de: {
-      appTitle: "🎯 Autodarts CORE",
+      appTitle: "🎯 Autodarts eDart Polska",
       modulesTitle: "Schalter / Module",
       help: "Hilfe",
       close: "Schließen",

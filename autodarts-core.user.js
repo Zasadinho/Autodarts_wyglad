@@ -1,14 +1,14 @@
 // ==UserScript==
-// @name         Autodarts – CORE
-// @namespace    autodarts.core.szala
-// @author       Szala/AI
+// @name         Autodarts – eDart Polska
+// @namespace    zasadinho
+// @author       Zasada
 // @version      2.5.3
 // @match        https://play.autodarts.com/*
 // @run-at       document-start
 // @grant        none
 // @inject-into  content
-// @homepageURL  https://github.com/Szala86/Autodarts-core
-// @supportURL   https://github.com/Szala86/Autodarts-core/issues
+// @homepageURL  https://https://github.com/Zasadinho/Autodarts_wyglad
+// @supportURL   https://github.com/Zasadinho/Autodarts_wyglad/issues
 // @downloadURL  https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
 // @updateURL    https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
 // @description  CORE panel with presets + PL/EN + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
@@ -147,7 +147,7 @@
   /* ================== I18N ================== */
   const I18N = {
     pl: {
-  appTitle: "🎯 Autodarts CORE",
+  appTitle: "🎯 Autodarts eDart Polska",
   modulesTitle: "Przełączniki / moduły",
   help: "Pomoc",
   close: "Zamknij",
@@ -220,6 +220,7 @@
     playerBg: "Tło karty gracza",
     playerBgOpacity: "Przezroczystość tła gracza",
     bgUrl: "URL tła",
+    bgUrlMultiple: "Wybór tła",   // NOWE
     overlay: "Przezroczystość nakładki",
     autoDisable: "Automatyczne wyłączenie przy niezgodności selektorów po aktualizacji (zalecane)",
   },
@@ -279,7 +280,7 @@
   }
 },
     en: {
-      appTitle: "🎯 Autodarts CORE",
+      appTitle: "🎯 Autodarts eDart Polska",
       modulesTitle: "Toggles / modules",
       help: "Help",
       close: "Close",
