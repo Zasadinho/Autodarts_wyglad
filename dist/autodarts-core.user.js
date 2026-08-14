@@ -2,7 +2,7 @@
 // @name         Autodarts – eDart Polska
 // @namespace    zasadinho
 // @author       Zasada
-// @version      2.5.6
+// @version      1.0.0
 // @match        https://play.autodarts.com/*
 // @run-at       document-start
 // @grant        none
@@ -53,7 +53,7 @@
         // Skin / Layout adjustable
     SKIN_UI_SCALE: 1,
     SKIN_SPACING_PLAYER: 20,
-    SKIN_BG_URL: "https://i.imgur.com/L7D6OpO.jpeg",
+    SKIN_BG_URL:"https://imgur.com/zi07Ud2.jpeg",
     SKIN_BG_OVERLAY_ALPHA: 0.55,
     SKIN_PLAYER_BG_HEX: "#c0c0c0",
     SKIN_PLAYER_BG_OPACITY: 0.10,
@@ -1437,7 +1437,7 @@ svg.ad-board-svg text{
 
   background-image:
     linear-gradient(rgba(8,26,40,.55), rgba(8,26,40,.55)),
-    url("https://i.imgur.com/L7D6OpO.jpeg") !important;
+    url("https://imgur.com/zi07Ud2.jpeg") !important;
 
   background-repeat: no-repeat !important;
   background-position: center bottom !important;

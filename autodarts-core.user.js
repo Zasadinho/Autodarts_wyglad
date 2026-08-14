@@ -2,16 +2,16 @@
 // @name         Autodarts – eDart Polska
 // @namespace    zasadinho
 // @author       Zasada
-// @version      2.5.3
+// @version      1.0.0
 // @match        https://play.autodarts.com/*
 // @run-at       document-start
 // @grant        none
 // @inject-into  content
 // @homepageURL  https://https://github.com/Zasadinho/Autodarts_wyglad
 // @supportURL   https://github.com/Zasadinho/Autodarts_wyglad/issues
-// @downloadURL  https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
-// @updateURL    https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
-// @description  CORE panel with presets + PL/EN + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
+// @downloadURL  https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+// @updateURL    https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+// @description  eDart Polska panel with presets + PL/EN + SafeMode + Total overlay fix + integrated Floating Clock + optional Back-to-Autodarts button on /boards + integrated Stylebot CSS as toggleable "Skin/Layout" module. Includes performance optimizations (dirty flags + scoped observers).
 // ==/UserScript==
 
 (() => {
@@ -53,7 +53,7 @@
         // Skin / Layout adjustable
     SKIN_UI_SCALE: 1,
     SKIN_SPACING_PLAYER: 20,
-    SKIN_BG_URL: "https://i.imgur.com/L7D6OpO.jpeg",
+    SKIN_BG_URL: "https://imgur.com/fiRXXyn.jpeg",
     SKIN_BG_OVERLAY_ALPHA: 0.55,
     SKIN_PLAYER_BG_HEX: "#c0c0c0",
     SKIN_PLAYER_BG_OPACITY: 0.10,
@@ -1320,7 +1320,7 @@ svg.ad-board-svg text{
 
   background-image:
     linear-gradient(rgba(8,26,40,.55), rgba(8,26,40,.55)),
-    url("https://i.imgur.com/L7D6OpO.jpeg") !important;
+    url("https://imgur.com/fiRXXyn.jpeg") !important;
 
   background-repeat: no-repeat !important;
   background-position: center bottom !important;
