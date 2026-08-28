@@ -44,9 +44,9 @@
   // Gotowe tła do wyboru z listy w zakładce Skin/Layout.
   // id "custom" pozwala wpisać własny URL w polu poniżej.
   const BG_PRESETS = [
-    { id: "bg1", url: "https://imgur.com/fiRXXyn.jpeg", label: { pl: "Tło 1 (domyślne)", en: "Background 1 (default)" } },
-    { id: "bg2", url: "https://imgur.com/zi07Ud2.jpeg", label: { pl: "Tło 2", en: "Background 2" } },
-    { id: "bg3", url: "https://imgur.com/cSMxnEb.jpeg", label: { pl: "Tło 3", en: "Background 3" } },
+    { id: "bg1", url: "https://i.imgur.com/WwbgtM7.png", label: { pl: "Tło 1 (domyślne)", en: "Background 1 (default)" } },
+    { id: "bg2", url: "https://i.imgur.com/NEZZ5ko.png", label: { pl: "Tło 2", en: "Background 2" } },
+    { id: "bg3", url: "https://imgur.com/zi07Ud2.jpeg", label: { pl: "Tło 3", en: "Background 3" } },
     { id: "custom", url: null, label: { pl: "Własne (wpisz URL poniżej)", en: "Custom (enter URL below)" } },
   ];
 
@@ -63,7 +63,7 @@
         // Skin / Layout adjustable
     SKIN_UI_SCALE: 1,
     SKIN_SPACING_PLAYER: 20,
-    SKIN_BG_URL: "https://imgur.com/fiRXXyn.jpeg",
+    SKIN_BG_URL: "https://i.imgur.com/WwbgtM7.png",
     SKIN_BG_PRESET: "bg1",   // "bg1" | "bg2" | "bg3" | "custom"
     SKIN_BG_OVERLAY_ALPHA: 0.55,
     SKIN_PLAYER_BG_HEX: "#c0c0c0",
@@ -1256,7 +1256,7 @@ svg.ad-board-svg text{
 
   background-image:
     linear-gradient(rgba(8,26,40,.55), rgba(8,26,40,.55)),
-    url("https://imgur.com/fiRXXyn.jpeg") !important;
+    url("https://i.imgur.com/WwbgtM7.png") !important;
 
   background-repeat: no-repeat !important;
   background-position: center bottom !important;
