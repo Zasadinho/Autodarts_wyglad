@@ -1,91 +1,91 @@
-# Install guide — Autodarts CORE (userscript)
+# Przewodnik instalacji — Autodarts CORE (userscript)
 
-Autodarts CORE is a userscript for **https://play.autodarts.com/**.
-You install it with a userscript manager (Violentmonkey / Tampermonkey), then it updates like any other script.
+Autodarts CORE to userscript dla **https://play.autodarts.com/**.
+Instalujesz go za pomocą menedżera userscriptów (Violentmonkey / Tampermonkey), a potem aktualizuje się jak każdy inny skrypt.
 
 ---
 
-## Recommended install (stable)
+## Zalecana instalacja (stabilna)
 
-✅ **Use the DIST build (stable):**  
-https://raw.githubusercontent.com/Szala86/Autodarts-core/main/dist/autodarts-core.user.js
+✅ **Użyj wersji DIST (stabilnej):**  
+https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
 
-Why DIST?
-- This is the **published** file meant for end users.
-- Update checks should also point to the **DIST** URL, so users always get the stable build.
+Dlaczego DIST?
+- To jest **opublikowany** plik przeznaczony dla użytkowników końcowych.
+- Sprawdzanie aktualizacji też powinno wskazywać na URL **DIST**, żeby użytkownicy zawsze dostawali stabilną wersję.
 
 ---
 
 ## Violentmonkey (Firefox)
 
-1. Install the **Violentmonkey** add-on.
-2. Open the DIST URL in a new tab:  
-   https://raw.githubusercontent.com/Szala86/Autodarts-core/main/dist/autodarts-core.user.js
-3. Violentmonkey will show an **Install** page → click **Install**.
-4. Go to Autodarts: https://play.autodarts.com/  
-   Open a match page and press **Shift+F** (panel toggle).
+1. Zainstaluj dodatek **Violentmonkey**.
+2. Otwórz URL DIST w nowej karcie:  
+   https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+3. Violentmonkey pokaże stronę **Install** → kliknij **Install**.
+4. Wejdź na Autodarts: https://play.autodarts.com/  
+   Otwórz stronę meczu i naciśnij **Shift+F** (przełącznik panelu).
 
 ---
 
 ## Tampermonkey (Chrome)
 
-Same steps:
+Te same kroki:
 
-1. Install **Tampermonkey** extension.
-2. Open the DIST URL:  
-   https://raw.githubusercontent.com/Szala86/Autodarts-core/main/dist/autodarts-core.user.js
-3. Click **Install**.
-4. Open Autodarts and test **Shift+F**.
-
----
-
-## Updating
-
-- In Violentmonkey/Tampermonkey: open the script → **Check for updates**.
-- Or enable automatic updates in the manager (recommended).
+1. Zainstaluj rozszerzenie **Tampermonkey**.
+2. Otwórz URL DIST:  
+   https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+3. Kliknij **Install**.
+4. Otwórz Autodarts i przetestuj **Shift+F**.
 
 ---
 
-## Optional: “bleeding edge” (dev) install
+## Aktualizacje
 
-⚠️ Only if you want to test the newest changes before a release:
-
-- SRC (development source):  
-  https://raw.githubusercontent.com/Szala86/Autodarts-core/main/src/autodarts-core.user.js
-
-Note: SRC can change at any time and may contain unfinished experiments.
+- W Violentmonkey/Tampermonkey: otwórz skrypt → **Check for updates**.
+- Albo włącz automatyczne aktualizacje w menedżerze (zalecane).
 
 ---
 
-## Troubleshooting
+## Opcjonalnie: instalacja „bleeding edge” (dev)
 
-### I see TWO clocks / TWO panels
-This almost always means **the script is running twice**.
+⚠️ Tylko jeśli chcesz przetestować najnowsze zmiany przed wydaniem:
 
-Check:
-1. Userscript manager → do you have **two Autodarts CORE scripts installed**?  
-   Disable/delete the older one.
-2. Do you have another script that also adds a clock/panel?  
-   Temporarily disable other Autodarts scripts and reload.
-3. Hard refresh the page:
+- SRC (źródło rozwojowe):  
+  https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+
+Uwaga: SRC może się zmienić w dowolnym momencie i może zawierać niedokończone eksperymenty.
+
+---
+
+## Rozwiązywanie problemów
+
+### Widzę DWA zegary / DWA panele
+To niemal zawsze oznacza, że **skrypt uruchamia się dwukrotnie**.
+
+Sprawdź:
+1. Menedżer userscriptów → czy masz zainstalowane **dwa skrypty Autodarts CORE**?  
+   Wyłącz/usuń starszy.
+2. Czy masz inny skrypt, który też dodaje zegar/panel?  
+   Tymczasowo wyłącz inne skrypty Autodarts i odśwież stronę.
+3. Wymuś odświeżenie strony:
    - Windows: **Ctrl + F5**
-   - Or restart the browser.
+   - Albo zrestartuj przeglądarkę.
 
-### Skin/Layout looks broken after an Autodarts update
-Autodarts UI updates can change Chakra “css-xxxxx” class names.
-CORE has a **selector health-check** and can auto-disable Skin/Layout if it detects a mismatch.
-If that happens:
-- Update CORE to the latest DIST version
-- Or temporarily disable Skin/Layout in the CORE panel
+### Skórka/Layout wygląda źle po aktualizacji Autodarts
+Aktualizacje interfejsu Autodarts mogą zmieniać nazwy klas Chakra „css-xxxxx”.
+CORE ma wbudowaną **kontrolę poprawności selektorów** i może automatycznie wyłączyć Skin/Layout, jeśli wykryje niezgodność.
+Jeśli tak się stanie:
+- Zaktualizuj CORE do najnowszej wersji DIST
+- Albo tymczasowo wyłącz Skin/Layout w panelu CORE
 
 ---
 
-## Quick usage
+## Szybkie użycie
 
-- **Shift+F**: toggle CORE panel  
-- **Shift+1 / Shift+2 / Shift+3**: preset A/B/C  
-- **Shift+M**: Safe Mode toggle  
-- **Shift+H**: help  
-- **Shift+T**: clock toggle  
-- **Shift+R**: clock reset  
-- **ESC**: close panel
+- **Shift+F**: przełącz panel CORE  
+- **Shift+1 / Shift+2 / Shift+3**: presety A/B/C  
+- **Shift+M**: przełącznik trybu bezpiecznego (Safe Mode)  
+- **Shift+H**: pomoc  
+- **Shift+T**: przełącznik zegara  
+- **Shift+R**: reset zegara  
+- **ESC**: zamknij panel
