@@ -1,29 +1,27 @@
-# Autodarts CORE (Userscript)
+# Autodarts eDart Polska
 
-**Languages:** [English](README.md) · [Magyar](README.hu.md) · [Deutsch](README.de.md)
+Modułowy userscript dla play.autodarts.com, który dodaje konfigurowalny panel eDartPolska z presetami i ulepszeniami interfejsu.
 
-A modular userscript for **play.autodarts.io** that adds a configurable **CORE panel** with presets and UI enhancements.
+⚠️ Uwaga: Ten projekt jest tworzony przez społeczność i nie jest powiązany z Autodarts.
 
-> ⚠️ Disclaimer: This project is community-made and **not** affiliated with Autodarts.
-
-## Features
-- Presets **A/B/C**
-- **HU / EN / DE** UI
-- **Safe Mode**
-- Toggleable **Skin / Layout** (integrated CSS)
-- Throw value → points conversion (**T20 → 60**, **D2 → 4**, etc.)
-- **Total overlay** fix
-- Checkout tip highlighting
-- Active player highlight
-- Triple-hit animation
-- Optional win music
-- Floating clock widget
-- Board marker utility
-- Optional **“Back to Autodarts”** button on `/boards`
+## Funkcje
+- Presety **A/B/C**
+- Interfejs **PL / EN**
+- **Tryb bezpieczny (Safe Mode)**
+- Przełączalny moduł **Skin / Layout** (zintegrowane CSS)
+- Konwersja wartości rzutu na punkty (**T20 → 60**, **D2 → 4**, itd.)
+- Poprawka **nakładki Total (Total overlay)**
+- Podświetlanie podpowiedzi checkout
+- Podświetlenie aktywnego gracza
+- Animacja trafienia w triple
+- Opcjonalna muzyka przy wygranej
+- Widget pływającego zegara
+- Narzędzie markera tablicy
+- Opcjonalny przycisk **„Powrót do Autodarts”** na `/boards`
 
 ---
 
-## Preview
+## Podgląd
 
 ### GIFs
 <img src="docs/media/anim_panel_and_clock.gif" width="520" alt="Panel + Clock" />
@@ -40,66 +38,61 @@ A modular userscript for **play.autodarts.io** that adds a configurable **CORE p
 
 ---
 
-## Supported pages
-- Match UI: `https://play.autodarts.com/matches/...`
-- Boards page (optional back button): `https://play.autodarts.com/boards`
+## Obsługiwane strony
+Interfejs meczu: https://play.autodarts.com/matches/...
+Strona tablic (opcjonalny przycisk powrotu): https://play.autodarts.com/boards
 
 ---
 
-## Hotkeys
-- **Shift+F** — toggle panel
-- **Shift+1 / Shift+2 / Shift+3** — Preset A / B / C
-- **Shift+M** — Safe Mode toggle
-- **Shift+H** — Help toggle
-- **Shift+T** — Clock toggle
-- **Shift+R** — Clock reset
-- **ESC** — close panel
+## Skróty klawiszowe
+Shift+F — przełącz panel
+Shift+1 / Shift+2 / Shift+3 — Preset A / B / C
+Shift+M — przełącz Tryb Bezpieczny
+Shift+H — przełącz pomoc
+Shift+T — przełącz zegar
+Shift+R — reset zegara
+ESC — zamknij panel
 
 ---
 
-## Installation
+## Instalacja
 
 ### Violentmonkey (Firefox)
-1. Install **Violentmonkey**
-2. Open the RAW script URL:
-   `https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js`
-3. Click **Install**
+1. Zainstaluj Violentmonkey
+2. Otwórz adres RAW skryptu:
+https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+3. Kliknij Install
 
 ### Tampermonkey (Chrome)
-1. Install **Tampermonkey**
-2. Open the RAW script URL:
-   `https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js`
-3. Click **Install**
+1. Zainstaluj Tampermonkey
+2. Otwórz adres RAW skryptu:
+https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
+3. Kliknij Install
 
 ---
 
-## Updating
-Use your userscript manager:
-- “Check for updates” (or automatic updates if enabled)
+## Aktualizacje
+Użyj menedżera userscriptów:
+„Sprawdź aktualizacje” (lub automatyczne aktualizacje, jeśli są włączone)
 
 ---
 
-## Usage notes
-- Presets A/B/C store separate settings.
-- Safe Mode limits extreme values to keep the UI stable.
-- If you use **Stylebot** on play.autodarts.io, disable it to avoid conflicts with the integrated Skin/Layout module.
+## Uwagi dotyczące użytkowania
+Presety A/B/C przechowują osobne ustawienia.
+Tryb Bezpieczny ogranicza skrajne wartości, aby interfejs pozostał stabilny.
+Jeśli używasz Stylebot na play.autodarts.io, wyłącz go, aby uniknąć konfliktów z modułem Skin/Layout.
 
 ---
 
-## Credits / Attribution
-This project integrates / is inspired by:
-- **Back-to-AD-Button** feature: based on **MartinHH**’s script
-- **Animate Triple Autodarts** / triple-hit animation concept: based on **amazingjin**’s script
+## Rozwiązywanie problemów
+Aktualizacje Autodarts mogą zmieniać hashowane klasy Chakra (.css-xxxxx).
+Preferuj stabilne selektory, takie jak:
+
+#ad-ext-turn
+#ad-ext-player-display
+
+własne klasy, które kontrolujesz
 
 ---
 
-## Troubleshooting
-Autodarts updates may change Chakra hashed classes (`.css-xxxxx`).
-Prefer stable selectors like:
-- `#ad-ext-turn`
-- `#ad-ext-player-display`
-- custom classes you control
-
----
-
-## License
+## Licencja

@@ -1,23 +1,23 @@
-# Autodarts CORE (Userscript)
+# Autodarts eDart Polska
 
-Modułowy userscript dla play.autodarts.io, który dodaje konfigurowalny panel CORE z presetami i ulepszeniami interfejsu.
+Modułowy userscript dla play.autodarts.com, który dodaje konfigurowalny panel eDartPolska z presetami i ulepszeniami interfejsu.
 
 ⚠️ Uwaga: Ten projekt jest tworzony przez społeczność i nie jest powiązany z Autodarts.
 
-Funkcje
-Presety A/B/C
-Interfejs w językach HU / EN / DE
-Tryb bezpieczny
-Przełączany Skin / Layout (wbudowany CSS)
-Konwersja rzutów → punktów (T20 → 60, D2 → 4, itd.)
-Poprawka nakładki Total
-Podświetlanie podpowiedzi checkoutu
-Podświetlanie aktywnego gracza
-Animacja trafienia potrójnego
-Opcjonalna muzyka zwycięstwa
-Pływający widget zegara
-Narzędzie do oznaczania tarczy
-Opcjonalny przycisk „Powrót do Autodarts” na stronie `/boards`
+## Funkcje
+- Presety **A/B/C**
+- Interfejs **PL / EN**
+- **Tryb bezpieczny (Safe Mode)**
+- Przełączalny moduł **Skin / Layout** (zintegrowane CSS)
+- Konwersja wartości rzutu na punkty (**T20 → 60**, **D2 → 4**, itd.)
+- Poprawka **nakładki Total (Total overlay)**
+- Podświetlanie podpowiedzi checkout
+- Podświetlenie aktywnego gracza
+- Animacja trafienia w triple
+- Opcjonalna muzyka przy wygranej
+- Widget pływającego zegara
+- Narzędzie markera tablicy
+- Opcjonalny przycisk **„Powrót do Autodarts”** na `/boards`
 
 ---
 
@@ -60,13 +60,13 @@ ESC — zamknij panel
 ### Violentmonkey (Firefox)
 1. Zainstaluj Violentmonkey
 2. Otwórz adres RAW skryptu:
-https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
+https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
 3. Kliknij Install
 
 ### Tampermonkey (Chrome)
 1. Zainstaluj Tampermonkey
 2. Otwórz adres RAW skryptu:
-https://raw.githubusercontent.com/Szala86/Autodarts-core/main/autodarts-core.user.js
+https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
 3. Kliknij Install
 
 ---
