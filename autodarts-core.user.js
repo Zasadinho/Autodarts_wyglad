@@ -7,7 +7,7 @@
 // @run-at       document-start
 // @grant        none
 // @inject-into  content
-// @homepageURL  https://https://github.com/Zasadinho/Autodarts_wyglad
+// @homepageURL  https://github.com/Zasadinho/Autodarts_wyglad
 // @supportURL   https://github.com/Zasadinho/Autodarts_wyglad/issues
 // @downloadURL  https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
 // @updateURL    https://raw.githubusercontent.com/Zasadinho/Autodarts_wyglad/dart/autodarts-core.user.js
@@ -17,7 +17,7 @@
 (() => {
   "use strict";
 
-  const SCRIPT_VERSION = "2.5.3";
+  const SCRIPT_VERSION = "2.6.0";
 
   /* ================== STORAGE ================== */
   const STORE_KEY_STATE = "ad_core_state";
@@ -40,6 +40,16 @@
     ? structuredClone(obj)
     : JSON.parse(JSON.stringify(obj));
 
+  /* ================== BACKGROUND PRESETS ================== */
+  // Gotowe tła do wyboru z listy w zakładce Skin/Layout.
+  // id "custom" pozwala wpisać własny URL w polu poniżej.
+  const BG_PRESETS = [
+    { id: "bg1", url: "https://imgur.com/fiRXXyn.jpeg", label: { pl: "Tło 1 (domyślne)", en: "Background 1 (default)" } },
+    { id: "bg2", url: "https://imgur.com/zi07Ud2.jpeg", label: { pl: "Tło 2", en: "Background 2" } },
+    { id: "bg3", url: "https://imgur.com/cSMxnEb.jpeg", label: { pl: "Tło 3", en: "Background 3" } },
+    { id: "custom", url: null, label: { pl: "Własne (wpisz URL poniżej)", en: "Custom (enter URL below)" } },
+  ];
+
   /* ================== DEFAULTS ================== */
   const DEFAULT_CFG = {
     // utilities
@@ -54,6 +64,7 @@
     SKIN_UI_SCALE: 1,
     SKIN_SPACING_PLAYER: 20,
     SKIN_BG_URL: "https://imgur.com/fiRXXyn.jpeg",
+    SKIN_BG_PRESET: "bg1",   // "bg1" | "bg2" | "bg3" | "custom"
     SKIN_BG_OVERLAY_ALPHA: 0.55,
     SKIN_PLAYER_BG_HEX: "#c0c0c0",
     SKIN_PLAYER_BG_OPACITY: 0.10,
@@ -109,7 +120,7 @@
   };
 
   const DEFAULT_CLOCK = {
-    blL: null, blB: null,         // BL anchor az órához
+    blL: null, blB: null,
     enabled: false,
     x: null,
     y: null,
@@ -122,8 +133,8 @@
   };
 
   const DEFAULT_UI = {
-    panelL: null, panelB: null,   // BL anchor a panelhez
-    btnL: null,   btnB: null,     // BL anchor a fő gombhoz
+    panelL: null, panelB: null,
+    btnL: null,   btnB: null,
     open: false,
     x: null,
     y: null,
@@ -220,7 +231,7 @@
     playerBg: "Tło karty gracza",
     playerBgOpacity: "Przezroczystość tła gracza",
     bgUrl: "URL tła",
-    bgUrlMultiple: "Wybór tła",   // NOWE
+    bgUrlMultiple: "Wybór tła",
     overlay: "Przezroczystość nakładki",
     autoDisable: "Automatyczne wyłączenie przy niezgodności selektorów po aktualizacji (zalecane)",
   },
@@ -349,6 +360,7 @@
         playerBg: "Player card background",
         playerBgOpacity: "Player background opacity",
         bgUrl: "Background image URL",
+        bgUrlMultiple: "Background choice",
         overlay: "Overlay opacity",
         autoDisable: "Auto-disable if selectors mismatch after update (recommended)",
       },
@@ -439,7 +451,6 @@
   const SDT_RE = /^([SDT])(\d{1,2})$/i;
   const CHECKOUT_TOKEN_RE = /^(?:[SDT](?:[1-9]|1\d|20)|BULL|SBULL|DBULL|25|50)$/i;
 
-  // ✅ Sticky selection (kijelölt dobáskártya indexe a turn-ön)
   const TURN_SEL_ATTR = "data-ad-sel-throw-idx";
 
   /* ================== UTILS ================== */
@@ -473,7 +484,7 @@
     const obs = new MutationObserver(() => { if (document.body) { obs.disconnect(); cb(); } });
     obs.observe(document.documentElement, { childList: true, subtree: true });
   }
-  
+
   function matchHotkey(e, def) {
     if (!def) return false;
     if (!!def.shift !== e.shiftKey) return false;
@@ -498,7 +509,6 @@
     }
   }
   function cssUrl(u) {
-    // minimál védelem: ne tudjon idézőjelet / sortörést “kiszúrni” a CSS-be
     return String(u || "").replace(/["\\\n\r]/g, "");
   }
 
@@ -524,17 +534,15 @@
         return id;
       },
       abort(){
-        // remove listeners
         while (off.length) { try { off.pop()(); } catch {} }
-        // clear timers
         for (const t of timers) { clearTimeout(t); clearInterval(t); }
         timers.clear();
       }
     };
   }
 
-  let scopeMain = null; // resize/fullscreen stb.
-  let scopeWin  = null; // win-music stop hookok
+  let scopeMain = null;
+  let scopeWin  = null;
 
   /* ================== STATE LOAD/MIGRATE ================== */
   function normalizeState(st) {
@@ -552,7 +560,7 @@
     out.schemaVersion = STATE_SCHEMA_VERSION;
     return out;
   }
- 
+
   function migrateToState(obj) {
     if (obj && obj.state) return migrateToState(obj.state);
     if (obj && typeof obj === "object" && Array.isArray(obj.presets) && obj.presets.length === 3 && obj.ui) return normalizeState(obj);
@@ -582,11 +590,11 @@
   state.schemaVersion = STATE_SCHEMA_VERSION;
   const cfg = () => state.presets[state.activePreset];
 
-  function saveStateNow(){ 
-    try { 
+  function saveStateNow(){
+    try {
       state.schemaVersion = STATE_SCHEMA_VERSION;
-      localStorage.setItem(STORE_KEY_STATE, JSON.stringify(state)); 
-    } catch {} 
+      localStorage.setItem(STORE_KEY_STATE, JSON.stringify(state));
+    } catch {}
   }
   let saveTimer = null;
   function saveStateDebounced() {
@@ -594,7 +602,6 @@
     saveTimer = setTimeout(() => { saveStateNow(); saveTimer = null; }, 250);
   }
 
-  // import legacy clock settings once
   (function importLegacyClockOnce(){
     try{
       const raw = localStorage.getItem(LEGACY_CLOCK_KEY);
@@ -777,20 +784,16 @@
   --ad-triple-rattle-delay-ms: ${clamp(+c.TRIPLE_RATTLE_DELAY_MS || 0, 0, 2500)}ms;
 }
 
-/* Total overlay: settings apply + card height unchanged */
 .ad-total-cell{
   position: relative !important;
   overflow: hidden !important;
   background-color: rgba(var(--ad-total-bg-rgb), var(--ad-total-bg-op)) !important;
   border-radius: 16px !important;
-
-  /* keret le */
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
 }
 
-/* overlay csak a szám, ne a háttér */
 .ad-total-overlay{
   background: transparent !important;
   border-radius: inherit !important;
@@ -831,28 +834,20 @@
   border: 1px solid rgba(0,0,0,.25) !important;
 }
 
-/* Hover + kattintás + selected állapot: ne szürküljön */
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw:hover,
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval]):hover,
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw:active,
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval]):active,
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw:focus,
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval]):focus,
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw[aria-selected="true"],
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval])[aria-selected="true"],
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw[aria-current="true"],
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval])[aria-current="true"],
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw[aria-pressed="true"],
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval])[aria-pressed="true"],
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw[data-selected="true"],
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval])[data-selected="true"],
-
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw[data-active="true"],
 #ad-ext-turn .ad-ext-turn-throw:has(p[data-adval])[data-active="true"]{
   background-color: rgba(var(--ad-throw-hover-bg-rgb), var(--ad-throw-hover-bg-op)) !important;
@@ -861,7 +856,6 @@
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw,
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw *{ color:#000 !important; }
 
-/* Sticky selected (userscript) – kattintva is maradjon narancs */
 #ad-ext-turn .ad-ext-turn-throw.ad-click-selected,
 #ad-ext-turn .ad-ext-turn-throw.ad-click-selected:hover{
   background-color: rgba(var(--ad-throw-hover-bg-rgb), var(--ad-throw-hover-bg-op)) !important;
@@ -992,7 +986,6 @@
   }
 
   /* ================== SKIN / STYLEBOT CSS (INTEGRATED) ================== */
-  // ✅ ide került 1:1-ben a Stylebot CSS-ed
   const EXTRA_CSS = String.raw`
 :root{
   --ad-ui-scale: 1;
@@ -1019,10 +1012,6 @@
   --spacing-player: 20px;
 }
 
-/* =========================================================
-   1–2 játékos:
-   ========================================================= */
-
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(1):only-child {
   top: 95px;
   left: 60px;
@@ -1041,18 +1030,12 @@
   height: calc(100% - 100px);
 }
 
-/* Név pozíció 1–2 játékosnál */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display:has(> div:nth-child(2):nth-last-child(1)) .css-y3hfdd,
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display:has(> div:only-child) .css-y3hfdd {
   position: absolute;
-  top: 14em; /* szabadon állítható */
+  top: 14em;
 }
 
-/* =========================================================
-   3–4 játékos:
-   ========================================================= */
-
-/* 1 (fent bal) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(1):nth-last-child(3),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(1):nth-last-child(4) {
   top: 95px;
@@ -1060,7 +1043,6 @@
   height: calc((105% - 180px) / 2 - var(--spacing-player));
 }
 
-/* 2 (fent jobb) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(2):nth-last-child(2),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(2):nth-last-child(3) {
   top: 95px;
@@ -1068,7 +1050,6 @@
   height: calc((105% - 180px) / 2 - var(--spacing-player));
 }
 
-/* 3 (lent bal) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(3):nth-last-child(1),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(3):nth-last-child(2) {
   top: calc(95px + ((100% - 180px) / 2) + var(--spacing-player));
@@ -1076,29 +1057,22 @@
   height: calc((105% - 180px) / 2 - var(--spacing-player));
 }
 
-/* 4 (lent jobb) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(4):last-child {
   top: calc(95px + ((100% - 180px) / 2) + var(--spacing-player));
   right: 60px;
   height: calc((105% - 180px) / 2 - var(--spacing-player));
 }
 
-/* Név pozíció 3–4 játékosnál */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display:has(> div:nth-child(3):nth-last-child(2)) .css-y3hfdd,
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display:has(> div:nth-child(4):last-child) .css-y3hfdd {
   position: absolute;
-  top: 7em; /* szabadon állítható */
+  top: 7em;
 }
-
-/* =========================================================
-   5–6 játékos:
-   ========================================================= */
 
 :root {
   --row-height-3: calc((108% - 180px) / 3 - var(--spacing-player));
 }
 
-/* 1 (fent bal) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(1):nth-last-child(5),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(1):nth-last-child(6) {
   top: 95px;
@@ -1106,7 +1080,6 @@
   height: var(--row-height-3);
 }
 
-/* 2 (fent jobb) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(2):nth-last-child(4),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(2):nth-last-child(5) {
   top: 95px;
@@ -1114,7 +1087,6 @@
   height: var(--row-height-3);
 }
 
-/* 3 (közép bal) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(3):nth-last-child(3),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(3):nth-last-child(4) {
   top: calc(95px + ((100% - 180px) / 3) + var(--spacing-player));
@@ -1122,7 +1094,6 @@
   height: var(--row-height-3);
 }
 
-/* 4 (közép jobb) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(4):nth-last-child(2),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(4):nth-last-child(3) {
   top: calc(95px + ((100% - 180px) / 3) + var(--spacing-player));
@@ -1130,7 +1101,6 @@
   height: var(--row-height-3);
 }
 
-/* 5 (lent bal) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(5):nth-last-child(1),
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(5):nth-last-child(2) {
   top: calc(95px + 2 * ((100% - 180px) / 3) + 2 * var(--spacing-player));
@@ -1138,33 +1108,23 @@
   height: var(--row-height-3);
 }
 
-/* 6 (lent jobb) */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div:nth-child(6):last-child {
   top: calc(95px + 2 * ((100% - 180px) / 3) + 2 * var(--spacing-player));
   right: 60px;
   height: var(--row-height-3);
 }
 
-/* Név pozíció 5–6 játékosnál */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display:has(> div:nth-child(5):nth-last-child(1)) .css-y3hfdd,
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display:has(> div:nth-child(6):last-child) .css-y3hfdd {
   position: absolute;
-  top: 2em; /* szabadon állítható */
+  top: 2em;
 }
-
-/* =========================================================
-   Hover / kattintás vizuál.
-   ========================================================= */
 
 :root:not(:has(.css-rc3vw3)) #ad-ext-turn .ad-ext-turn-throw:hover {
   box-shadow: var(--color-shadow-strong);
   transform: scale(1.03);
   cursor: pointer;
 }
-
-/* =========================================================
-   Konténerek / méretek
-   ========================================================= */
 
 :root:not(:has(.css-rc3vw3)) .css-tkevr6 {
   position: relative;
@@ -1173,19 +1133,16 @@
   box-sizing: border-box;
 }
 
-/* Player box szélesség */
 :root:not(:has(.css-rc3vw3)) #ad-ext-player-display > div {
   position: absolute;
   width: 411px;
 }
 
-/* Scoring + Bullout teljes szélesség */
 :root:not(:has(.css-rc3vw3)) .css-1omnor5,
 :root:not(:has(.css-rc3vw3)) .css-ul22ge {
   width: 900px;
 }
 
-/* Scoring elemek magasság */
 :root:not(:has(.css-rc3vw3)) .css-1dkgpmk,
 :root:not(:has(.css-rc3vw3)) .css-1wlduvp,
 :root:not(:has(.css-rc3vw3)) .css-sm8wdq,
@@ -1196,14 +1153,9 @@
   height: 110px;
 }
 
-/* Menüsáv teljes szélesség */
 :root:not(:has(.css-rc3vw3)) .css-19lo6pj {
   width: 150%;
 }
-
-/* =========================================================
-   Chalkboard (1v1)
-   ========================================================= */
 
 :root:has(.css-1u90hiz) .css-1u90hiz {
   position: absolute;
@@ -1218,20 +1170,12 @@
   width: 52%;
 }
 
-/* =========================================================
-   Scoring + board pozíció
-   ========================================================= */
-
 :root:not(:has(.css-rc3vw3)):root:not(:has(.css-7lnr9n)):root:not(:has(.css-15suq9)) .css-1emway5,
 :root:not(:has(.css-rc3vw3)):root:not(:has(.css-15suq9)) .css-jbngkd,
 :root:not(:has(.css-rc3vw3)) .css-1cdcn26 {
   position: relative;
   top: 1em;
 }
-
-/* =========================================================
-   Avatar: méret + pozíció (1v1)
-   ========================================================= */
 
 :root:not(:has(.css-rc3vw3)):root:has(.css-1cdcn26):root:not(:has(#ad-ext-player-display > div:nth-child(3))) div.chakra-stack.css-1psdi5l {
   position: absolute;
@@ -1244,10 +1188,6 @@
 :root:not(:has(.css-rc3vw3)):root:has(.css-1cdcn26):root:not(:has(#ad-ext-player-display > div:nth-child(3))) img.chakra-image.css-6t0bzd {
   scale: 0.5;
 }
-
-/* =========================================================
-   BOARD – Winmau/BladeX look + szürke keret
-   ========================================================= */
 
 :root{
   --bladex-black:  #1b1b1b;
@@ -1304,10 +1244,6 @@ svg.ad-board-svg text{
   fill: var(--bladex-number) !important;
 }
 
-/* =========================================================
-   Háttér – teljes kitöltés (COVER)
-   ========================================================= */
-
 :root:has(.css-1cdcn26) body,
 :root:has(.css-1cdcn26) #root,
 :root:has(.css-1cdcn26) .css-z42oq0,
@@ -1329,7 +1265,6 @@ svg.ad-board-svg text{
 }
 `;
 
-    // ================== SKIN – selector health-check ==================
   const SKIN_HEALTH_SSKEY = () => `ad_core_skin_sel_warned_${SCRIPT_VERSION}`;
   let skinHealthTimer = 0;
   let skinHealthAttempts = 0;
@@ -1342,19 +1277,16 @@ svg.ad-board-svg text{
     const turn = document.querySelector("#ad-ext-turn");
     const players = document.querySelector("#ad-ext-player-display");
 
-    // ha még nem töltött be a meccs UI, próbáljuk újra párszor
     if (!turn || !players) {
       if (skinHealthAttempts++ < 15) scheduleSkinHealthCheck();
       return;
     }
 
-    // Ha egyik ismert Chakra selector sincs, gyanús: Autodarts update / selector drift
     const anyKnown = document.querySelector(
       ".css-tkevr6, .css-19lo6pj, .css-1omnor5, .css-ul22ge, .css-1dkgpmk, .css-1wlduvp, .css-sm8wdq, .css-881tme, .css-rrf7rv, .css-1cdcn26, .css-jbngkd, .css-1emway5"
     );
     if (anyKnown) return;
 
-    // toast csak egyszer / session / verzió
     try {
       if (sessionStorage.getItem(SKIN_HEALTH_SSKEY()) === "1") return;
       sessionStorage.setItem(SKIN_HEALTH_SSKEY(), "1");
@@ -1365,7 +1297,6 @@ svg.ad-board-svg text{
     const msg = (L && L.toasts && L.toasts.skinWarn) ? L.toasts.skinWarn : "Skin: selector mismatch";
     if (typeof showToast === "function") showToast(msg);
 
-    // optional auto-disable
     if (c.SKIN_AUTO_DISABLE_ON_MISMATCH) {
       c.SKIN_CSS = false;
       dirtySkin();
@@ -1419,7 +1350,6 @@ svg.ad-board-svg text{
   --ad-player-bg-op: ${pbgOp};
 }
 
-/* override background-image to use the editable URL + overlay alpha */
 :root:has(.css-1cdcn26) body,
 :root:has(.css-1cdcn26) #root,
 :root:has(.css-1cdcn26) .css-z42oq0,
@@ -1433,7 +1363,6 @@ svg.ad-board-svg text{
     var(--ad-bg-url) !important;
 }
 
-/* IMPORTANT: keep CORE adjustable card backgrounds even when Skin CSS is ON */
 #ad-ext-turn .ad-ext-turn-throw.ad-has-throw{
   background-color: rgba(var(--ad-throw-bg-rgb), var(--ad-throw-bg-op)) !important;
   background-image: none !important;
@@ -1443,14 +1372,12 @@ svg.ad-board-svg text{
   background-image: none !important;
 }
 
-/* ✅ STICKY SELECT: Skin CSS mellett is maradjon hover szín */
 #ad-ext-turn .ad-ext-turn-throw.ad-click-selected,
 #ad-ext-turn .ad-ext-turn-throw.ad-click-selected:hover{
   background-color: rgba(var(--ad-throw-hover-bg-rgb), var(--ad-throw-hover-bg-op)) !important;
   background-image: none !important;
 }
 
-/* Player panelek háttér (Skin/Layout) */
 #ad-ext-player-display > div{
   background-color: rgba(var(--ad-player-bg-rgb), var(--ad-player-bg-op)) !important;
 }
@@ -1523,7 +1450,7 @@ svg.ad-board-svg text{
     const existing = document.getElementById(BM_BTN_ID);
     if (existing) {
       const span = existing.querySelector("span");
-      if (span && span.textContent !== label) span.textContent = label; // ✅ nyelvváltásnál is frissül
+      if (span && span.textContent !== label) span.textContent = label;
       return;
     }
 
@@ -1602,7 +1529,6 @@ svg.ad-board-svg text{
   document.addEventListener("pointerdown", (e) => {
     if (e.button != null && e.button !== 0) return;
 
-    // 1) keressük meg a kártyát a composedPath-ban (stabilabb)
     let card = null;
     const path = (typeof e.composedPath === "function") ? e.composedPath() : null;
     if (path) {
@@ -1610,7 +1536,6 @@ svg.ad-board-svg text{
         if (n && n.classList && n.classList.contains("ad-ext-turn-throw")) { card = n; break; }
       }
     }
-    // 2) fallback: closest
     if (!card) card = e.target?.closest?.(".ad-ext-turn-throw");
     if (!card) return;
 
@@ -1621,9 +1546,6 @@ svg.ad-board-svg text{
     const idx = cards.indexOf(card);
     if (idx < 0) return;
 
-    // fontos: itt MOST NEM szűrünk ad-has-throw / data-adval alapján,
-    // mert pont ez szokott “nem kész lenni” kattintáskor.
-    // Csak a teljesen üres/placeholdert dobjuk ki:
     const p = card.querySelector("p");
     const raw = (p?.textContent || "").trim();
     if (isPlaceholderRaw(raw)) return;
@@ -1701,14 +1623,12 @@ function applyStickyThrowSelection(turn){
   const cards = Array.from(turn.querySelectorAll(".ad-ext-turn-throw"));
   if (!cards.length) return;
 
-  // ha rossz index (pl. kevesebb kártya lett), töröljük az attribútumot
   if (idx < 0 || idx >= cards.length) {
     if (rawAttr != null) turn.removeAttribute(TURN_SEL_ATTR);
     cards.forEach(c => c.classList.remove("ad-click-selected"));
     return;
   }
 
-  // ha a kiválasztott kártya placeholder lett -> töröljük a kijelölést
   const p = cards[idx].querySelector("p");
   const txt = (p?.textContent || "").trim();
   if (isPlaceholderRaw(txt)) {
@@ -1800,19 +1720,17 @@ function applyStickyThrowSelection(turn){
 function markCheckoutInTurnBar(turn) {
   if (!turn) return;
 
-  // ✅ Biztonság: a Total környékén soha ne legyen checkout class
   turn.querySelectorAll(".ad-total-cell .ad-ext-turn-checkout-value, .ad-total-overlay.ad-ext-turn-checkout-value")
       .forEach(el => el.classList.remove("ad-ext-turn-checkout-value"));
 
   const nodes = turn.querySelectorAll(".chakra-text, p, span, div");
 
   for (const el of nodes) {
-    if (el.closest(".ad-ext-turn-throw")) continue;    // dobáskártyákon ne
-    if (el.closest(".ad-total-cell")) continue;        // total cellen belül ne
-    if (el.closest(".ad-total-overlay")) continue;     // total overlayen ne
-    if (isInButton(el)) continue;                      // gombokon ne
+    if (el.closest(".ad-ext-turn-throw")) continue;
+    if (el.closest(".ad-total-cell")) continue;
+    if (el.closest(".ad-total-overlay")) continue;
+    if (isInButton(el)) continue;
 
-    // ✅ KRITIKUS: csak LEAF elemet jelöljünk (különben a * selector mindent elvisz)
     if (el.children && el.children.length > 0) continue;
 
     const txt = (el.textContent || "").replace(/\s+/g, " ").trim();
@@ -1952,14 +1870,12 @@ let winArmed = true;
 let winLastPlay = 0;
 let winPrevFinishPresent = false;
 
-// ✅ ha a win UI eltűnik (next leg/set vagy auto progress), ennyi ideig várunk, hogy ne villogásra álljon le
 let winUiAbsentSince = 0;
 const WIN_STOP_ABSENT_MS = 450;
 
 const WIN_PLAY_COOLDOWN_MS = 2500;
 const RE_FINISH = /(finish|befejez|beenden)/i;
 
-// ✅ ezekre a gombokra azonnal álljon le
 const RE_STOP_BTN = /(finish|befejez|beenden|next\s*leg|következő\s*leg|nächste\s*leg|naechste\s*leg|next\s*set|következő\s*set|nächste\s*set|naechste\s*set)/i;
 
 function safe(fn) { try { return fn(); } catch {} }
@@ -1973,20 +1889,17 @@ function installWinStopHooks() {
   if (scopeWin) scopeWin.abort();
   scopeWin = makeScope();
 
-  // ✅ Stop gombokra
   scopeWin.on(document, "click", (e) => {
     const btn = e.target?.closest?.("button, a");
     if (!btn) return;
     const txt = ((btn.textContent || "") + " " + (btn.getAttribute("aria-label") || "")).trim();
     if (RE_STOP_BTN.test(txt)) stopWinAudio();
-  }, true); // capture
+  }, true);
 
-  // ✅ Navigáció / oldalváltás esetén is álljon le
   const onNav = () => stopWinAudio();
   scopeWin.on(window, "popstate", onNav, true);
   scopeWin.on(window, "hashchange", onNav, true);
 
-  // SPA route váltás (history patch) – ezt nem lehet “unpatch”-elni, ezért csak egyszer
   if (!installWinStopHooks._patched) {
     installWinStopHooks._patched = true;
 
@@ -2073,10 +1986,8 @@ function scanWinMusic() {
   const finishPresent = !!findFinishButton();
   const stopUiPresent = finishPresent || findStopButtonPresent();
 
-  // ha még nem volt dobás ebben a turnben, újra “élesítjük”
   if (!hadThrowInThisTurn()) winArmed = true;
 
-  // ✅ START: finish megjelent ÉS volt dobás
   if (finishPresent && !winPrevFinishPresent && hadThrowInThisTurn()) {
     const t = Date.now();
     if (winArmed && winUnlocked && t - winLastPlay > WIN_PLAY_COOLDOWN_MS) {
@@ -2090,8 +2001,6 @@ function scanWinMusic() {
     }
   }
 
-  // ✅ STOP: csak akkor álljon meg, ha a win UI eltűnt (auto new leg/set, auto exit, stb.)
-  // (nem időre, nem gif hosszra)
   if (winAudio && !winAudio.paused) {
     if (stopUiPresent) {
       winUiAbsentSince = 0;
@@ -2247,7 +2156,6 @@ function scanWinMusic() {
     let x = cs.x;
     let y = cs.y;
 
-    // default: jobb felül
     if (typeof x !== "number") x = Math.round(window.innerWidth - r.width - 16);
     if (typeof y !== "number") y = 16;
 
@@ -2257,7 +2165,6 @@ function scanWinMusic() {
     clockEl.style.top  = Math.round(safe.y) + "px";
   }
 
-  // ✅ locale követi a nyelvet (pl-PL / en-US)
   function renderClockTime() {
     if (!clockTimeEl) return;
     const cs = state.ui.clock;
@@ -2270,7 +2177,7 @@ function scanWinMusic() {
     };
     if (!cs.showSeconds) delete opts.second;
 
-    const loc = (state.ui.lang === "en") ? "en-US" : (state.ui.lang === "pl" ? "pl-PL" : "pl-PL");
+    const loc = (state.ui.lang === "en") ? "en-US" : "pl-PL";
     clockTimeEl.textContent = new Date().toLocaleTimeString(loc, opts);
   }
 
@@ -2312,7 +2219,6 @@ function scanWinMusic() {
 
       renderCss();
 
-      // Skin only if dirty
       if (DIRTY.skin) {
         DIRTY.skin = false;
         ensureSkinCss();
@@ -2343,14 +2249,12 @@ function scanWinMusic() {
         else restoreTotalOverlays(turn);
 
         if (c.THROWS_TO_POINTS) updateAllThrowGroups(turn);
-        // ✅ mindig visszarakjuk a kijelölt kártyára
         applyStickyThrowSelection(turn);
         if (c.CHECKOUT_VIEW) markCheckoutInTurnBar(turn);
         if (c.TRIPLE_ANIM) updateTripleHighlight(turn);
 
         if (c.WIN_MUSIC) scanWinMusic();
       } else {
-        // ✅ ha nem volt turn-dirty, akkor is tartsuk életben
         if (turn) applyStickyThrowSelection(turn);
         if (c.WIN_MUSIC) scanWinMusic();
       }
@@ -2382,7 +2286,6 @@ function scanWinMusic() {
     if (!cfg().WIN_MUSIC && scopeWin) { scopeWin.abort(); scopeWin = null; }
     configureActivePolling();
 
-    // toggles can affect everything
     dirtyTurn();
     dirtyPlayers();
     dirtyBoard();
@@ -2466,10 +2369,8 @@ function ensurePanelPosition() {
   if (!panel) return;
   const r = panel.getBoundingClientRect();
 
-  // hagyjunk helyet alul a 44px-es fő gombnak + padding
   const RESERVED_BOTTOM = 44 + 16 + 12;
 
-  // 1) Egyszeri migráció régi x/y-ból BL-be (ha volt mentett pozíciód)
   if (!__migratedPanelBL) {
     if (typeof state.ui.panelL !== "number" && typeof state.ui.x === "number") state.ui.panelL = state.ui.x;
     if (typeof state.ui.panelB !== "number" && typeof state.ui.y === "number") state.ui.panelB = Math.round(window.innerHeight - (state.ui.y + r.height));
@@ -2488,7 +2389,6 @@ function ensurePanelPosition() {
   panel.style.left = Math.round(safe.x) + "px";
   panel.style.top  = Math.round(safe.y) + "px";
 
-  // csak akkor írjuk át a mentést, ha ténylegesen clamping történt
   if (Math.round(safe.x) !== wantX || Math.round(safe.y) !== wantY) {
     state.ui.panelL = Math.round(safe.x);
     state.ui.panelB = Math.round(window.innerHeight - (safe.y + r.height));
@@ -2545,7 +2445,6 @@ function ensureMainButtonPosition() {
     showToast(T().toasts.preset(presetLabel(state.activePreset)));
   }
 
-  // ✅ Teljes nyelvfrissítés: panel + tooltip + /boards gomb + óra locale + toast
   function setLang(newLang) {
     state.ui.lang = (newLang === "pl" || newLang === "en") ? newLang : "pl";
     saveStateDebounced();
@@ -2657,7 +2556,7 @@ function ensureMainButtonPosition() {
       active: ["ACTIVE_COLOR_HEX","ACTIVE_OUTLINE_PX","ACTIVE_GLOW"],
       triple: ["TRIPLE_SHIMMER_MS","TRIPLE_SLAM_MS","TRIPLE_RATTLE_MS","TRIPLE_RATTLE_DELAY_MS"],
       win: ["WIN_VOLUME"],
-      skin: ["SKIN_UI_SCALE","SKIN_SPACING_PLAYER","SKIN_BG_URL","SKIN_BG_OVERLAY_ALPHA","SKIN_PLAYER_BG_HEX","SKIN_PLAYER_BG_OPACITY"],
+      skin: ["SKIN_UI_SCALE","SKIN_SPACING_PLAYER","SKIN_BG_URL","SKIN_BG_PRESET","SKIN_BG_OVERLAY_ALPHA","SKIN_PLAYER_BG_HEX","SKIN_PLAYER_BG_OPACITY"],
     };
 
     if (tab === "clock") {
@@ -2735,7 +2634,6 @@ function ensureMainButtonPosition() {
     document.body.appendChild(uiBtn);
     ensureMainButtonPosition();
 
-    // click vs drag
     let btnDrag = null;
     let btnMoved = false;
 
@@ -2781,7 +2679,6 @@ function ensureMainButtonPosition() {
       if (state.ui.open) { renderPanel(); ensurePanelPosition(); }
     });
 
-    // panel
     panel = document.createElement("div");
     panel.id = "ad-core-panel";
     Object.assign(panel.style, {
@@ -2857,7 +2754,6 @@ function ensureMainButtonPosition() {
       reader.readAsText(f);
     });
 
-    // drag panel via header
     let drag = null;
     panel.addEventListener("pointerdown", (e) => {
       const header = panel.querySelector(".ad-core-header");
@@ -2915,7 +2811,6 @@ function ensureMainButtonPosition() {
 
     panel.innerHTML = "";
 
-    // HEADER
     const header = document.createElement("div");
     header.className = "ad-core-header";
     Object.assign(header.style, {
@@ -2959,7 +2854,6 @@ function ensureMainButtonPosition() {
     rightHead.style.alignItems = "center";
     rightHead.style.gap = "8px";
 
-    // Language buttons next to help
     const langWrap = document.createElement("div");
     langWrap.style.display = "flex";
     langWrap.style.gap = "6px";
@@ -3002,7 +2896,6 @@ function ensureMainButtonPosition() {
     header.appendChild(rightHead);
     panel.appendChild(header);
 
-    // CONTENT
     const content = document.createElement("div");
     Object.assign(content.style, { flex: "1 1 auto", overflow: "auto" });
     panel.appendChild(content);
@@ -3016,7 +2909,6 @@ function ensureMainButtonPosition() {
     });
     content.appendChild(body);
 
-    // LEFT COL
     const leftCol = document.createElement("div");
     Object.assign(leftCol.style, {
       padding: compact ? "10px" : "12px",
@@ -3066,7 +2958,6 @@ function ensureMainButtonPosition() {
 
       label.appendChild(nameSpan);
 
-      // ✅ jelölés a név mellett, ha állítható
       if (configurable) {
         const ic = document.createElement("span");
         ic.className = "ad-mod-icon";
@@ -3111,11 +3002,9 @@ function ensureMainButtonPosition() {
       leftCol.appendChild(row);
     }
 
-    // Modules
     addModuleRow("general",  () => true, () => {}, true,  false, false);
     addModuleRow("diag",     () => true, () => {}, true,  false, false);
 
-    // NEW: Skin toggle
     addModuleRow("skin",     () => c.SKIN_CSS, v => {
       c.SKIN_CSS = v;
       dirtySkin();
@@ -3143,7 +3032,6 @@ function ensureMainButtonPosition() {
       showToast(v ? L.toasts.clockOn : L.toasts.clockOff);
     }, false, true, false);
 
-    // Quick section
     const quick = document.createElement("div");
     quick.style.marginTop = "10px";
     quick.style.display = "grid";
@@ -3228,7 +3116,6 @@ function ensureMainButtonPosition() {
 
     leftCol.appendChild(quick);
 
-    // RIGHT COL
     const rightCol = document.createElement("div");
     Object.assign(rightCol.style, { padding: compact ? "10px" : "12px" });
 
@@ -3471,7 +3358,7 @@ function ensureMainButtonPosition() {
       box.appendChild(title);
 
       const info = {
-      schemaVersion: state.schemaVersion ?? null,  
+      schemaVersion: state.schemaVersion ?? null,
       scriptVersion: SCRIPT_VERSION,
       storeKey: STORE_KEY_STATE,
       preset: presetLabel(state.activePreset),
@@ -3496,7 +3383,6 @@ function ensureMainButtonPosition() {
      ts: new Date().toISOString(),
      };
 
-      // Key-Value blokk
       const kvWrap = document.createElement("div");
       kvWrap.style.display = "grid";
       kvWrap.style.gap = "8px";
@@ -3513,10 +3399,9 @@ function ensureMainButtonPosition() {
       kv("Path", info.path);
       kv("SafeMode", info.safeMode ? "ON" : "OFF", info.safeMode ? "ok" : "warn");
       kv("Compact", info.compact ? "ON" : "OFF", info.compact ? "ok" : "warn");
-      kv("Aktív poll", `${info.activePollMs} ms`, info.activePollMs ? "ok" : "warn");
+      kv("Aktywny poll", `${info.activePollMs} ms`, info.activePollMs ? "ok" : "warn");
       box.appendChild(kvWrap);
 
-      // Copy debug
       const btnRow = document.createElement("div");
       btnRow.style.display = "flex";
       btnRow.style.gap = "8px";
@@ -3528,8 +3413,7 @@ function ensureMainButtonPosition() {
         await navigator.clipboard.writeText(txt);
         showToast(L.saved);
       } catch {
-      // fallback
-      prompt("Másold ki:", txt);
+      prompt("Skopiuj:", txt);
         }
       }, "primary", compact);
 
@@ -3537,7 +3421,6 @@ function ensureMainButtonPosition() {
       btnRow.appendChild(btnCopy);
       box.appendChild(btnRow);
 
-      // Selector check
       const sep = document.createElement("div");
       sep.style.height = "1px";
       sep.style.background = "rgba(255,255,255,0.10)";
@@ -3554,14 +3437,8 @@ function ensureMainButtonPosition() {
       const checks = [
       ["#ad-ext-player-display", "Player display (#ad-ext-player-display)", true],
       ["#ad-ext-turn",          "Turn cards (#ad-ext-turn)",               true],
-
-      // Chakra generált class: nem stabil, nem mindig jelenik meg → opcionális
       [".css-rc3vw3",           "Chakra (often used) .css-rc3vw3",          false],
-
-      // ez sem “garantált”, de a Skin CSS-nél sokat segít, hagyjuk required helyett inkább optionalnak
       [".css-1cdcn26",          "Chakra (skin root) .css-1cdcn26",          false],
-
-      // Marker ON esetén hasznos – de OFF-nál hiányozhat → optional
       ["svg.ad-board-svg",      "Board marker svg.ad-board-svg",            false],
       ];
 
@@ -3680,7 +3557,9 @@ function ensureMainButtonPosition() {
         });
         pbo.addEventListener("change", () => showToast(L.saved));
 
-        // background URL
+        // --- NOWE: dropdown wyboru gotowego tła ---
+        let urlInp = null;
+
         const urlWrap = document.createElement("div");
         urlWrap.style.display = "grid";
         urlWrap.style.gap = "8px";
@@ -3692,7 +3571,7 @@ function ensureMainButtonPosition() {
         urlLabel.style.fontSize = compact ? "12px" : "13px";
         urlWrap.appendChild(urlLabel);
 
-        const urlInp = document.createElement("input");
+        urlInp = document.createElement("input");
         urlInp.type = "text";
         urlInp.value = String(c.SKIN_BG_URL || "");
         Object.assign(urlInp.style, {
@@ -3707,13 +3586,74 @@ function ensureMainButtonPosition() {
         });
         urlInp.addEventListener("change", () => {
           c.SKIN_BG_URL = String(urlInp.value || "").trim();
+          c.SKIN_BG_PRESET = "custom";
           saveStateDebounced();
           dirtySkin(); scheduleUpdate();
           showToast(L.saved);
         });
         urlWrap.appendChild(urlInp);
 
+        const presetSelWrap = document.createElement("div");
+        presetSelWrap.style.display = "grid";
+        presetSelWrap.style.gap = "8px";
+
+        const presetSelLabel = document.createElement("div");
+        presetSelLabel.textContent = L.skinText.bgUrlMultiple;
+        presetSelLabel.style.fontWeight = "900";
+        presetSelLabel.style.opacity = "0.9";
+        presetSelLabel.style.fontSize = compact ? "12px" : "13px";
+        presetSelWrap.appendChild(presetSelLabel);
+
+        const sel = document.createElement("select");
+        Object.assign(sel.style, {
+          width: "100%",
+          borderRadius: "12px",
+          border: "1px solid rgba(255,255,255,.18)",
+          background: "rgba(255,255,255,.08)",
+          color: "#fff",
+          padding: "10px 12px",
+          fontWeight: "900",
+          boxSizing: "border-box",
+        });
+
+        BG_PRESETS.forEach(p => {
+          const opt = document.createElement("option");
+          opt.value = p.id;
+          opt.textContent = p.label[lang()] || p.label.en;
+          opt.style.color = "#000";
+          sel.appendChild(opt);
+        });
+
+        let initialPresetId = c.SKIN_BG_PRESET;
+        if (!initialPresetId) {
+          const match = BG_PRESETS.find(p => p.url && p.url === c.SKIN_BG_URL);
+          initialPresetId = match ? match.id : "custom";
+        }
+        sel.value = initialPresetId;
+        urlInp.disabled = initialPresetId !== "custom";
+        urlInp.style.opacity = urlInp.disabled ? "0.55" : "1";
+
+        sel.addEventListener("change", () => {
+          const chosen = BG_PRESETS.find(p => p.id === sel.value);
+          c.SKIN_BG_PRESET = sel.value;
+          if (chosen && chosen.url) {
+            c.SKIN_BG_URL = chosen.url;
+            urlInp.value = chosen.url;
+            urlInp.disabled = true;
+          } else {
+            urlInp.disabled = false;
+          }
+          urlInp.style.opacity = urlInp.disabled ? "0.55" : "1";
+          saveStateDebounced();
+          dirtySkin(); scheduleUpdate();
+          showToast(L.saved);
+        });
+
+        presetSelWrap.appendChild(sel);
+        box.appendChild(presetSelWrap);
         box.appendChild(urlWrap);
+        // --- KONIEC nowej sekcji ---
+
         break;
       }
 
@@ -3953,7 +3893,6 @@ function ensureMainButtonPosition() {
       return;
     }
 
-    // clock scale from keyboard
     if (e.ctrlKey && !e.shiftKey && !e.altKey && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
       if (!state.ui.clock.enabled) return;
       e.preventDefault();
@@ -3975,18 +3914,16 @@ function ensureMainButtonPosition() {
 
   /* ================== INIT ================== */
   function start() {
-      // reset main scope (listeners/timers) if start() is ever called again
     if (scopeMain) scopeMain.abort();
     scopeMain = makeScope();
-    
+
     initStickyThrowSelectOnce();
     ensureHead(() => {
       ensureUIStyle();
       renderCss();
-      ensureSkinCss(); // ✅ skin css initial
+      ensureSkinCss();
       if (cfg().WIN_MUSIC) initWinMusicOnce();
 
-      // Scoped observers + dirty flags
       let turnObs = null;
       let playersObs = null;
       let lastTurn = null;
@@ -4014,7 +3951,6 @@ function ensureMainButtonPosition() {
       }
 
       const obs = new MutationObserver((muts) => {
-        // New SVGs? board marker might need refresh
         for (const m of muts) {
           if (m.addedNodes && m.addedNodes.length) {
             for (const n of m.addedNodes) {
