@@ -45,7 +45,7 @@
   // id "custom" pozwala wpisać własny URL w polu poniżej.
   const BG_PRESETS = [
     { id: "bg1", url: "https://i.imgur.com/WwbgtM7.png", label: { pl: "Tło 1 (domyślne)", en: "Background 1 (default)" } },
-    { id: "bg2", url: "https://i.imgur.com/NEZZ5ko.png", label: { pl: "Tło 2", en: "Background 2" } },
+    { id: "bg2", url: "https://i.imgur.com/50ibddM.png", label: { pl: "Tło 2", en: "Background 2" } },
     { id: "bg3", url: "https://imgur.com/zi07Ud2.jpeg", label: { pl: "Tło 3", en: "Background 3" } },
     { id: "custom", url: null, label: { pl: "Własne (wpisz URL poniżej)", en: "Custom (enter URL below)" } },
   ];
